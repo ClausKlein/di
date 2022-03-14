@@ -6,7 +6,8 @@
 
 namespace di = boost::di;
 
-class room {}; class speaker {};
+class room {};
+class speaker {};
 
 struct name : std::string {
   using std::string::string;

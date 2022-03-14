@@ -36,7 +36,7 @@ struct implementation : interface1, interface2 {
 };
 
 struct implementation_exception : interface1 {
-#if defined(__EXCEPTIONS)
+#if defined(USE__EXCEPTIONS)
   implementation_exception() { throw 0; }
 #endif
   void dummy() override {}
@@ -84,7 +84,7 @@ int main() {
     auto i3 = injector.create<std::shared_ptr<interface2>>();
 
 //<<make sure that exception doesn't affect injector>>
-#if defined(__EXCEPTIONS)
+#if defined(USE__EXCEPTIONS)
     auto exception_thrown = false;
     try {
       injector.create<std::shared_ptr<implementation_exception>>();
