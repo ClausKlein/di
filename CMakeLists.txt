@@ -13,9 +13,12 @@ project(
 )
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17 CACHE STRING "Default value for CXX_STANDARD property of targets.")
+  set(CMAKE_CXX_STANDARD 14 CACHE STRING "Default value for CXX_STANDARD property of targets.")
   option(CMAKE_CXX_STANDARD_REQUIRED "Default value for CXX_STANDARD_REQUIRED property of targets." YES)
   option(CMAKE_CXX_EXTENSIONS "Default value for CXX_EXTENSIONS property of targets." NO)
+endif()
+if(NOT DEFINED CXX_STANDARD)
+  set(CXX_STANDARD ${CMAKE_CXX_STANDARD} CACHE STRING "C++ Standard Version. [14|17|20]")
 endif()
 
 add_library(${PROJECT_NAME} INTERFACE)
@@ -24,17 +27,23 @@ target_include_directories(${PROJECT_NAME} INTERFACE
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extension/include>
   $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD ${CMAKE_CXX_STANDARD})
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-  set(COMPILER_SPECIFIC_CXX_STANDARD "/std:c++${CXX_STANDARD}")
-  string(REPLACE "20" "latest" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})
+  #XXX set(COMPILER_SPECIFIC_CXX_STANDARD "/std:c++${CXX_STANDARD}")
+  #XXX string(REPLACE "20" "latest" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})
 
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_SPECIFIC_CXX_STANDARD} /W3 /EHsc /Zc:__cplusplus")
+  # being a cross-platform target, we enforce standards conformance on MSVC
+  target_compile_options(${PROJECT_NAME} INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->)
 endif()
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set(IS_TOPLEVEL_PROJECT TRUE)
-  include(cmake/WarningsAsErrors.cmake)
+  option(WarningsAsErrors "Be really pedantic!" YES)
+  if(WarningsAsErrors)
+    include(cmake/WarningsAsErrors.cmake)
+  endif()
 else()
   set(IS_TOPLEVEL_PROJECT FALSE)
 endif()
