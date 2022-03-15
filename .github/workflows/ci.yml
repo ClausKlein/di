@@ -34,12 +34,13 @@ jobs:
           key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
 
 
-      - name: Install llvm-12 Ubuntu Host
+      - name: Install llvm-12 on Ubuntu Host
         if: startsWith(matrix.os, 'ubuntu')
         shell: bash
         run: |
+          sudo apt-get update
           sudo apt-get install \
-            llvm-12 clang-12 libclang-12-dev clang-tidy-12 ||
+            llvm-12 clang-12 libclang-12-dev clang-tools-12 clang-tidy-12 ||
               echo IGNORED
 
       - name: Configure
