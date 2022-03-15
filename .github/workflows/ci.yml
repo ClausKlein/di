@@ -5,6 +5,7 @@ on: [push, pull_request]
 
 env:
   CTEST_OUTPUT_ON_FAILURE: 1
+  CMAKE_EXPORT_COMPILE_COMMANDS: 1
   CPM_SOURCE_CACHE: ${{ github.workspace }}/cpm_modules
   # CHECKS: -checks='-*,modernize-*,misc-*,bugprone-*,hicpp-*,cert-*,readability-*,portability-*,performance-*'
 
@@ -57,7 +58,7 @@ jobs:
       - name: BuildWithInstalledVersion
         shell: bash
         run: |
-          cmake -S example -B build/test -D CMAKE_PREFIX_PATH=$PWD/stage -D CMAKE_EXPORT_COMPILE_COMMANDS=1
+          cmake -S example -B build/test -D CMAKE_PREFIX_PATH=$PWD/stage -D TEST_INSTALLED_VERSION=1
           cmake --build build/test --config Release -j 4
 
       - name: TestWithInstalledVersion
