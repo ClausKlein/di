@@ -3,7 +3,15 @@
 #
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-#
+
+option(TEST_INSTALLED_VERSION "Test the version found by find_package" OFF)
+if(TEST_INSTALLED_VERSION)
+    cmake_minimum_required(VERSION 3.16...3.22)
+    project(example LANGUAGES CXX)
+    find_package(DI 1.2 CONFIG REQUIRED)
+    enable_testing()
+endif()
+
 function(example example)
     string(REPLACE "/" "_" tmp ${example})
     set(EXAMPLE_NAME example.${tmp})

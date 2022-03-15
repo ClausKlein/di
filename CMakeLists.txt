@@ -13,52 +13,39 @@ project(
 )
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD
-      17
-      CACHE STRING "Default value for CXX_STANDARD property of targets."
-  )
-  option(CMAKE_CXX_STANDARD_REQUIRED
-         "Default value for CXX_STANDARD_REQUIRED property of targets." YES
-  )
-  option(CMAKE_CXX_EXTENSIONS
-         "Default value for CXX_EXTENSIONS property of targets." NO
-  )
+  set(CMAKE_CXX_STANDARD 17 CACHE STRING "Default value for CXX_STANDARD property of targets.")
+  option(CMAKE_CXX_STANDARD_REQUIRED "Default value for CXX_STANDARD_REQUIRED property of targets." YES)
+  option(CMAKE_CXX_EXTENSIONS "Default value for CXX_EXTENSIONS property of targets." NO)
 endif()
 
 add_library(${PROJECT_NAME} INTERFACE)
 set(INCLUDE_INSTALL_DIR include/${PROJECT_NAME}-${PROJECT_VERSION}/include)
 target_include_directories(${PROJECT_NAME} INTERFACE
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extension/include>
-    $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>)
-#XXX target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/extension/include)
-
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extension/include>
+  $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>)
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
   set(COMPILER_SPECIFIC_CXX_STANDARD "/std:c++${CXX_STANDARD}")
-  string(REPLACE "20" "latest" COMPILER_SPECIFIC_CXX_STANDARD
-                 ${COMPILER_SPECIFIC_CXX_STANDARD}
-  )
+  string(REPLACE "20" "latest" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})
 
-  set(CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} ${COMPILER_SPECIFIC_CXX_STANDARD} /W3 /EHsc /Zc:__cplusplus"
-  )
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_SPECIFIC_CXX_STANDARD} /W3 /EHsc /Zc:__cplusplus")
 endif()
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set(IS_TOPLEVEL_PROJECT TRUE)
+  include(cmake/WarningsAsErrors.cmake)
 else()
   set(IS_TOPLEVEL_PROJECT FALSE)
 endif()
 
 include(cmake/CPM.cmake)
-include(cmake/WarningsAsErrors.cmake)
 
 # PackageProject.cmake will be used to make our target installable
 CPMAddPackage(
   NAME PackageProject.cmake
   GITHUB_REPOSITORY TheLartians/PackageProject.cmake
-  VERSION 1.6.0
+  VERSION 1.8.0
 )
 
 # Create target Boost::DI and install target
@@ -72,18 +59,14 @@ packageProject(
   COMPATIBILITY SameMajorVersion
 )
 
-option(BOOST_DI_OPT_BUILD_TESTS "Build and perform Boost.DI tests"
-       ${IS_TOPLEVEL_PROJECT}
-)
+option(BOOST_DI_OPT_BUILD_TESTS "Build and perform Boost::DI tests" ${IS_TOPLEVEL_PROJECT})
 if(BOOST_DI_OPT_BUILD_TESTS)
   enable_testing()
   add_subdirectory(extension/test)
   add_subdirectory(test)
 endif()
 
-option(BOOST_DI_OPT_BUILD_EXAMPLES "Build perform Boost.DI examples"
-       ${IS_TOPLEVEL_PROJECT}
-)
+option(BOOST_DI_OPT_BUILD_EXAMPLES "Build perform Boost::DI examples" ${IS_TOPLEVEL_PROJECT})
 if(BOOST_DI_OPT_BUILD_EXAMPLES)
   add_subdirectory(example)
 endif()
