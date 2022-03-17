@@ -76,6 +76,9 @@ packageProject(
   COMPATIBILITY SameMajorVersion
 )
 
+install(DIRECTORY extension/include/
+  DESTINATION ${INCLUDE_INSTALL_DIR})
+
 option(BOOST_DI_OPT_BUILD_TESTS "Build and perform Boost::DI tests" ${IS_TOPLEVEL_PROJECT})
 if(BOOST_DI_OPT_BUILD_TESTS)
   enable_testing()
