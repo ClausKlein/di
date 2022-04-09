@@ -5,12 +5,12 @@
 # (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
 function(test test)
-    string(REPLACE "/" "_" tmp ${test})
-    set(TEST_NAME test.${tmp})
-    add_executable(${TEST_NAME} ${CMAKE_CURRENT_LIST_DIR}/${test}.cpp)
-    target_include_directories(${TEST_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR})
-    target_link_libraries(${TEST_NAME} PRIVATE Boost::DI)
-    add_test(${TEST_NAME} ${TEST_NAME})
+  string(REPLACE "/" "_" tmp ${test})
+  set(TEST_NAME test.${tmp})
+  add_executable(${TEST_NAME} ${CMAKE_CURRENT_LIST_DIR}/${test}.cpp)
+  target_include_directories(${TEST_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR})
+  target_link_libraries(${TEST_NAME} PRIVATE Boost::DI)
+  add_test(${TEST_NAME} ${TEST_NAME})
 endfunction()
 
 test(bindings/constructor_bindings)

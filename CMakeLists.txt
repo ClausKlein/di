@@ -13,20 +13,26 @@ project(
 )
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14 CACHE STRING "Default value for CXX_STANDARD property of targets.")
+  set(CMAKE_CXX_STANDARD
+      14
+      CACHE STRING "Default value for CXX_STANDARD property of targets."
+  )
   option(CMAKE_CXX_STANDARD_REQUIRED "Default value for CXX_STANDARD_REQUIRED property of targets." YES)
   option(CMAKE_CXX_EXTENSIONS "Default value for CXX_EXTENSIONS property of targets." NO)
 endif()
 if(NOT DEFINED CXX_STANDARD)
-  set(CXX_STANDARD ${CMAKE_CXX_STANDARD} CACHE STRING "C++ Standard Version. [14|17|20]")
+  set(CXX_STANDARD
+      ${CMAKE_CXX_STANDARD}
+      CACHE STRING "C++ Standard Version. [14|17|20]"
+  )
 endif()
 
 add_library(${PROJECT_NAME} INTERFACE)
 set(INCLUDE_INSTALL_DIR include/${PROJECT_NAME}-${PROJECT_VERSION}/include)
-target_include_directories(${PROJECT_NAME} INTERFACE
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extension/include>
-  $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>)
+target_include_directories(
+  ${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+                            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extension/include> $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>
+)
 # NOTE: this will not exported! set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD ${CMAKE_CXX_STANDARD})
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
 
