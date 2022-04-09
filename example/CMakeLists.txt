@@ -6,7 +6,7 @@
 
 option(TEST_INSTALLED_VERSION "Test the version found by find_package" OFF)
 if(TEST_INSTALLED_VERSION)
-  cmake_minimum_required(VERSION 3.16...3.22)
+  cmake_minimum_required(VERSION 3.16...3.23)
   project(example LANGUAGES CXX)
   set(CMAKE_CXX_STANDARD
       14
@@ -20,11 +20,13 @@ function(example example)
   string(REPLACE "/" "_" tmp ${example})
   set(EXAMPLE_NAME example.${tmp})
   add_executable(${EXAMPLE_NAME} ${CMAKE_CURRENT_LIST_DIR}/${example}.cpp)
-  target_include_directories(${EXAMPLE_NAME} SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/include)
+  #XXX target_include_directories(${EXAMPLE_NAME} SYSTEM PRIVATE ${CMAKE_SOURCE_DIR}/include)
   target_link_libraries(${EXAMPLE_NAME} PRIVATE Boost::DI)
   add_test(${EXAMPLE_NAME} ${EXAMPLE_NAME})
 endfunction()
 
+# Note: should not be needed! CK
+# FIXME: prevent #include "example/polymorphism/common/config.hpp"
 include_directories(..)
 
 example(annotations)

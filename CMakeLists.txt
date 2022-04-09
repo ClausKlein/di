@@ -4,7 +4,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
-cmake_minimum_required(VERSION 3.16...3.22)
+cmake_minimum_required(VERSION 3.16...3.23)
 
 project(
   DI
@@ -20,6 +20,7 @@ if(NOT DEFINED CMAKE_CXX_STANDARD)
   option(CMAKE_CXX_STANDARD_REQUIRED "Default value for CXX_STANDARD_REQUIRED property of targets." YES)
   option(CMAKE_CXX_EXTENSIONS "Default value for CXX_EXTENSIONS property of targets." NO)
 endif()
+
 if(NOT DEFINED CXX_STANDARD)
   set(CXX_STANDARD
       ${CMAKE_CXX_STANDARD}
@@ -28,10 +29,12 @@ if(NOT DEFINED CXX_STANDARD)
 endif()
 
 add_library(${PROJECT_NAME} INTERFACE)
+add_library(Boost::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+
 set(INCLUDE_INSTALL_DIR include/${PROJECT_NAME}-${PROJECT_VERSION}/include)
 target_include_directories(
-  ${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extension/include> $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>
+  ${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+                            $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/extension/include> $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>
 )
 # NOTE: this will not exported! set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD ${CMAKE_CXX_STANDARD})
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
@@ -71,13 +74,12 @@ packageProject(
   VERSION ${PROJECT_VERSION}
   NAMESPACE Boost
   BINARY_DIR ${PROJECT_BINARY_DIR}
-  INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include
+  INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include
   INCLUDE_DESTINATION ${INCLUDE_INSTALL_DIR}
   COMPATIBILITY SameMajorVersion
 )
 
-install(DIRECTORY extension/include/
-  DESTINATION ${INCLUDE_INSTALL_DIR})
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/extension/include/ DESTINATION ${INCLUDE_INSTALL_DIR})
 
 option(BOOST_DI_OPT_BUILD_TESTS "Build and perform Boost::DI tests" ${IS_TOPLEVEL_PROJECT})
 if(BOOST_DI_OPT_BUILD_TESTS)
