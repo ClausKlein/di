@@ -19,7 +19,11 @@ namespace extension {
 
 template <class T>
 auto get_type() {
+#if defined(__GNUC__) || defined(__clang__)
   return std::string{__PRETTY_FUNCTION__};
+#else
+  return std::string{__func__};  // TODO(CK): check this!
+#endif
 }
 
 template <class T>

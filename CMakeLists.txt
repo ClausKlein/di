@@ -43,6 +43,7 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
   # XXX set(COMPILER_SPECIFIC_CXX_STANDARD "/std:c++${CXX_STANDARD}")
   # XXX string(REPLACE "20" "latest" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})
 
+  # TODO: prevent use of CMAKE_CXX_FLAGS! CK
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_SPECIFIC_CXX_STANDARD} /W3 /EHsc /Zc:__cplusplus")
 
   # being a cross-platform target, we enforce standards conformance on MSVC

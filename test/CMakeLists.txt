@@ -13,8 +13,9 @@ function(test test)
   add_test(${TEST_NAME} ${TEST_NAME})
 endfunction()
 
+# TODO: prevent use of CMAKE_CXX_FLAGS! CK
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_DI_NAMESPACE= -include common/test.hpp")
+  set("${CMAKE_CXX_FLAGS} -DBOOST_DI_NAMESPACE= -include common/test.hpp")
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang OR ${CMAKE_CXX_COMPILER_ID} STREQUAL AppleClang)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_DI_NAMESPACE= -include common/test.hpp")
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
