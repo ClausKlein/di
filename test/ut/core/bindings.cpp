@@ -5,6 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #include "boost/di/core/bindings.hpp"
+
 #include "boost/di/scopes/instance.hpp"
 #include "common/fakes/fake_dependency.hpp"
 #include "common/fakes/fake_injector.hpp"

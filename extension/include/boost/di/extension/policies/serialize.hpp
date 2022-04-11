@@ -19,11 +19,7 @@ namespace extension {
 
 template <class T>
 auto get_type() {
-#if defined(__clang__)
-  return std::string{&__PRETTY_FUNCTION__[56], sizeof(__PRETTY_FUNCTION__) - 58};
-#elif defined(__GNUC__)
-  return std::string{&__PRETTY_FUNCTION__[61], sizeof(__PRETTY_FUNCTION__) - 63};
-#endif
+  return std::string{__PRETTY_FUNCTION__};
 }
 
 template <class T>

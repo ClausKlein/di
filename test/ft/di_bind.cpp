@@ -7,7 +7,6 @@
 // clang-format off
 #include <initializer_list>  // has to be before, due to the bug in clang < 3.7
 // clang-format on
-#include "boost/di.hpp"
 #include <functional>
 #include <iterator>
 #include <memory>
@@ -15,6 +14,8 @@
 #include <string>
 #include <tuple>
 #include <vector>
+
+#include "boost/di.hpp"
 
 struct Concept {};
 struct ConceptImpl {};
@@ -185,7 +186,7 @@ test any_of_with_scope = [] {
 #else
         di::bind<i2, i1>().in(scope).template to<impl1_2>()
 #endif
-            );
+    );
 
     auto object_1 = injector.template create<std::shared_ptr<i1>>();
     auto object_2 = injector.template create<std::shared_ptr<i2>>();
@@ -205,7 +206,7 @@ test any_of_with_scope_split = [] {
 #else
         di::bind<i1>().in(scope).template to<impl1_2>(), di::bind<i2>().in(scope).template to<impl1_2>()
 #endif
-            );
+    );
 
     auto object_1 = injector.template create<std::shared_ptr<i1>>();
     auto object_2 = injector.template create<std::shared_ptr<i2>>();
@@ -1385,7 +1386,6 @@ test bind_to_ctor_multiple_placeholders = [] {
   expect(dynamic_cast<impl2 *>(object.c_.up.get()));
 };
 
-
 test bind_to_const_ref_sharedptr_via_placeholder = [] {
   struct i {
     virtual ~i() noexcept = default;
@@ -1397,16 +1397,11 @@ test bind_to_const_ref_sharedptr_via_placeholder = [] {
   };
 
   struct app {
-    explicit app(const std::shared_ptr<i>& p)
-    : value {p->get_value()}
-    {}
+    explicit app(const std::shared_ptr<i> &p) : value{p->get_value()} {}
     int value;
   };
 
-  const auto injector = di::make_injector(
-     di::bind<i>().to<impl>(),
-     di::bind<app>(di::placeholders::_)
-    );
+  const auto injector = di::make_injector(di::bind<i>().to<impl>(), di::bind<app>(di::placeholders::_));
 
   auto object = injector.create<app>();
 

@@ -10,6 +10,7 @@
 
 #include <boost/di.hpp>
 #include <memory>
+
 #include "common.hpp"
 //->
 

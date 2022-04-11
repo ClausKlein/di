@@ -5,9 +5,11 @@
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #include "boost/di/scopes/instance.hpp"
+
 #include <functional>
 #include <memory>
 #include <string>
+
 #include "common/common.hpp"
 #include "common/fakes/fake_injector.hpp"
 #include "common/fakes/fake_provider.hpp"

@@ -24,7 +24,7 @@ class unique {
     static decltype(wrappers::unique<unique, decltype(aux::declval<TProvider>().get(
                                                  typename TProvider::config::template memory_traits<T>::type{}))>{
         aux::declval<TProvider>().get(typename TProvider::config::template memory_traits<T>::type{})})
-    try_create(const TProvider&);
+        try_create(const TProvider&);
 
     template <class T, class, class TProvider>
     auto create(const TProvider& provider) const {

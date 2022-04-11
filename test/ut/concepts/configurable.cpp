@@ -5,7 +5,9 @@
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #include "boost/di/concepts/configurable.hpp"
+
 #include <type_traits>
+
 #include "boost/di/aux_/compiler.hpp"
 #include "boost/di/config.hpp"
 #include "boost/di/providers/stack_over_heap.hpp"

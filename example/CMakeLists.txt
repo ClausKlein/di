@@ -20,14 +20,10 @@ function(example example)
   string(REPLACE "/" "_" tmp ${example})
   set(EXAMPLE_NAME example.${tmp})
   add_executable(${EXAMPLE_NAME} ${CMAKE_CURRENT_LIST_DIR}/${example}.cpp)
-  #XXX target_include_directories(${EXAMPLE_NAME} SYSTEM PRIVATE ${CMAKE_SOURCE_DIR}/include)
+  target_include_directories(${EXAMPLE_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR})
   target_link_libraries(${EXAMPLE_NAME} PRIVATE Boost::DI)
   add_test(${EXAMPLE_NAME} ${EXAMPLE_NAME})
 endfunction()
-
-# Note: should not be needed! CK
-# FIXME: prevent #include "example/polymorphism/common/config.hpp"
-include_directories(..)
 
 example(annotations)
 example(automatic_injection)

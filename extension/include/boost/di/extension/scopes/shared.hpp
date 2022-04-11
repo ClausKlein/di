@@ -83,7 +83,6 @@ class shared {
 static constexpr detail::shared shared{};
 
 class shared_config : public di::config {
-
  public:
   template <class T>
   struct scope_traits {

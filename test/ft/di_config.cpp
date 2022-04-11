@@ -7,10 +7,11 @@
 // clang-format off
 #include <initializer_list>  // has to be before, due to the bug in clang < 3.7
 // clang-format on
-#include "boost/di.hpp"
 #include <memory>
-#include <vector>
 #include <set>
+#include <vector>
+
+#include "boost/di.hpp"
 
 namespace di = boost::di;
 
@@ -200,7 +201,7 @@ test constructible_policy_must_be_bound_array = [] {
   auto il = {1.f, 2.f, 3.f, 4.f};
   const auto injector = di::make_injector<must_be_bound>(di::bind<float[]>().to(il), di::bind<int>().to(42),
                                                          di::bind<int[]>().to<int, int>(), di::bind<i1>().to<impl1>(),
-                                                         di::bind<impl1>().in(di::unique), di::bind<i1* []>().to<i1, impl1>());
+                                                         di::bind<impl1>().in(di::unique), di::bind<i1*[]>().to<i1, impl1>());
 
   injector.create<c>();
 };
@@ -273,8 +274,8 @@ struct policy {
 class custom_policies : public di::config {
  public:
   static auto policies(...) noexcept {
-    return di::make_policies(policy{}, [](auto) { ++policy::called(); },
-                             [](__BOOST_DI_UNUSED auto type) { ++policy::called(); });
+    return di::make_policies(
+        policy{}, [](auto) { ++policy::called(); }, [](__BOOST_DI_UNUSED auto type) { ++policy::called(); });
   }
 };
 

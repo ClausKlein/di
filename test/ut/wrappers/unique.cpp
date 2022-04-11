@@ -5,6 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt or unique at http://www.boost.org/LICENSE_1_0.txt)
 //
 #include "boost/di/wrappers/unique.hpp"
+
 #include <memory>
 #if __has_include(<boost / shared_ptr.hpp>)
 #include <boost/shared_ptr.hpp>

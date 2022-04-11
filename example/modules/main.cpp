@@ -6,6 +6,7 @@
 //
 //<-
 #include <boost/di.hpp>
+
 #include "config.hpp"
 #include "controller.hpp"
 #include "module_model.hpp"

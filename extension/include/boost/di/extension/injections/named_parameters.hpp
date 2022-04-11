@@ -74,11 +74,10 @@ constexpr pair get_name_impl(const char* input, int begin, int n = 0, int quote 
   return !*input || *input == ','
              ? pair{0, 0}
              : (quote == 2 ? pair{begin + 1, n}
-                           : (quote == 1 && *input == '"'
+                           : (quote == 1 && *input == '"' ? get_name_impl(input + 1, begin, n, quote + 1)
+                              : quote == 0 && *input == '"'
                                   ? get_name_impl(input + 1, begin, n, quote + 1)
-                                  : quote == 0 && *input == '"' ? get_name_impl(input + 1, begin, n, quote + 1)
-                                                                : get_name_impl(input + 1, quote == 0 ? begin + 1 : begin,
-                                                                                quote == 1 ? n + 1 : n, quote)));
+                                  : get_name_impl(input + 1, quote == 0 ? begin + 1 : begin, quote == 1 ? n + 1 : n, quote)));
 }
 
 constexpr pair get_name(const char* input, int N, int c = 0, int i = 0) {

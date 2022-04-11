@@ -6,6 +6,7 @@
 //
 //<-
 #include "view.hpp"
+
 #include <cassert>
 //->
 

@@ -22,8 +22,7 @@ class deduce {
 
     template <class T, class TName, class TProvider>
     static decltype(typename TProvider::config::template scope_traits<T>::type::template scope<TExpected, TGiven>{}
-                        .template try_create<T, TName>(aux::declval<TProvider>()))
-    try_create(const TProvider&);
+                        .template try_create<T, TName>(aux::declval<TProvider>())) try_create(const TProvider&);
 
     template <class T, class TName, class TProvider>
     auto create(const TProvider& provider) {

@@ -7,7 +7,9 @@
 
 //<-
 #include "module_model.hpp"
+
 #include <boost/di.hpp>
+
 #include "common.hpp"
 #include "config.hpp"
 #include "model.hpp"

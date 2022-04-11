@@ -130,7 +130,7 @@ class injector __BOOST_DI_CORE_INJECTOR_POLICY()(<TConfig, pool<>, TDeps...>)
   template <template <class...> class T, class R = binder::resolve_template_t<injector, aux::identity<T<>>>,
             __BOOST_DI_REQUIRES(is_creatable<R, no_name, aux::true_type>::value) = 0>
   R
-      // clang-format off
+  // clang-format off
   create()
       // clang-format on
       const {
@@ -140,7 +140,7 @@ class injector __BOOST_DI_CORE_INJECTOR_POLICY()(<TConfig, pool<>, TDeps...>)
   template <template <class...> class T, class R = binder::resolve_template_t<injector, aux::identity<T<>>>,
             __BOOST_DI_REQUIRES(!is_creatable<R, no_name, aux::true_type>::value) = 0>
   __BOOST_DI_CONCEPTS_CREATABLE_ERROR_MSG R
-      // clang-format off
+  // clang-format off
   create()
       // clang-format on
       const {

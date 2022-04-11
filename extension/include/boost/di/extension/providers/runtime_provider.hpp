@@ -42,7 +42,7 @@ class runtime_provider : public config {
     };
 
     template <class T, class TInitialization, class TMemory, class... TArgs>
-    auto get(const TInitialization &, const TMemory &, TArgs &&... args) const {
+    auto get(const TInitialization &, const TMemory &, TArgs &&...args) const {
       auto it = bindings_.find(std::type_index(typeid(T)));
       if (it == bindings_.end()) {
         return get<T>(std::integral_constant < bool,
@@ -54,7 +54,7 @@ class runtime_provider : public config {
 
    private:
     template <class T, class... TArgs>
-    auto get(std::true_type, TArgs &&... args) const {
+    auto get(std::true_type, TArgs &&...args) const {
       return new T{std::forward<TArgs>(args)...};
     }
 
@@ -132,7 +132,7 @@ class injector : public core::injector<runtime_provider<TErrorPolicy, TScopeTrai
   }
 
   template <class... TBindings>
-  void install(const TBindings &... bindings) {
+  void install(const TBindings &...bindings) {
     (void)aux::swallow{0, (install(bindings), 0)...};
   }
 
@@ -164,7 +164,7 @@ class injector : public core::injector<runtime_provider<TErrorPolicy, TScopeTrai
     return new T{binding.object_};
   }
 };
-}  // detail
+}  // namespace detail
 
 using runtime_injector = detail::injector<assert_error_policy, di::extension::shared_config>;
 

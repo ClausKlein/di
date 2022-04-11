@@ -46,10 +46,10 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_SPECIFIC_CXX_STANDARD} /W3 /EHsc /Zc:__cplusplus")
 
   # being a cross-platform target, we enforce standards conformance on MSVC
-  # TODO: target_compile_options(${PROJECT_NAME} INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->)
+  target_compile_options(${PROJECT_NAME} INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->)
 endif()
 
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+if("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
   set(IS_TOPLEVEL_PROJECT TRUE)
   option(WarningsAsErrors "Be really pedantic!" YES)
   if(WarningsAsErrors)

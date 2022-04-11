@@ -9,6 +9,7 @@
 #define VIEW_HPP
 
 #include <memory>
+
 #include "common.hpp"
 //->
 
