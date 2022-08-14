@@ -4,7 +4,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
-cmake_minimum_required(VERSION 3.16...3.23)
+cmake_minimum_required(VERSION 3.16...3.24)
 
 project(
   DI
@@ -14,7 +14,7 @@ project(
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD
-      14
+      17
       CACHE STRING "Default value for CXX_STANDARD property of targets."
   )
   option(CMAKE_CXX_STANDARD_REQUIRED "Default value for CXX_STANDARD_REQUIRED property of targets." YES)
@@ -52,7 +52,7 @@ endif()
 
 if("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
   set(PROJECT_IS_TOP_LEVEL TRUE)
-  option(WarningsAsErrors "Be really pedantic!" NO)
+  option(WarningsAsErrors "Be really pedantic!" YES)
   if(WarningsAsErrors)
     include(cmake/WarningsAsErrors.cmake)
   endif()
@@ -82,14 +82,14 @@ packageProject(
 
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/extension/include/ DESTINATION ${INCLUDE_INSTALL_DIR})
 
-option(BOOST_DI_OPT_BUILD_TESTS "Build and perform Boost::DI tests" ${IS_TOPLEVEL_PROJECT})
+option(BOOST_DI_OPT_BUILD_TESTS "Build and perform Boost::DI tests" ${PROJECT_IS_TOP_LEVEL})
 if(BOOST_DI_OPT_BUILD_TESTS)
   enable_testing()
   add_subdirectory(extension/test)
   add_subdirectory(test)
 endif()
 
-option(BOOST_DI_OPT_BUILD_EXAMPLES "Build perform Boost::DI examples" ${IS_TOPLEVEL_PROJECT})
+option(BOOST_DI_OPT_BUILD_EXAMPLES "Build perform Boost::DI examples" ${PROJECT_IS_TOP_LEVEL})
 if(BOOST_DI_OPT_BUILD_EXAMPLES)
   add_subdirectory(example)
 endif()
