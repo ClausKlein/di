@@ -3,7 +3,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND CMAKE_CXX_SIMULATE_ID MATCHES "MSVC
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   target_compile_options(
     ${PROJECT_NAME} INTERFACE -Wall -Wextra -Wpedantic # FIXME -Werror
-                                                       # TODO: -Wshadow
+                                                       -Wshadow
   )
 
   if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION GREATER_EQUAL 10.0)

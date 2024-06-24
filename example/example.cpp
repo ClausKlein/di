@@ -66,10 +66,10 @@
                     |         |     auto injector = di::make_injector(                                 |
                     |         |       di::bind<interface>().to<implementation>()+----------------------+
                     |         +---+ , di::bind<>().to(42)
-                    +--------------+, module()                                     +---------------------+
-                                    );                                  +----------+Compile time creation|
-                                                                        +          |guarantee!           |
-                                    auto object = injector.create<example>();      +---------------------+
+                    +--------------+, module()                                   +---------------------+
+                                    );                                +----------+Compile time creation|
+                                                                      +          |guarantee!           |
+                                    auto object = injector.create<example>();    +---------------------+
                                     assert(object.run());  +
                                   }                        |
                                                            |  +----------------------------------------+

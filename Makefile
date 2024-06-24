@@ -8,7 +8,7 @@ VALGRIND:=--memcheck="valgrind --leak-check=full --error-exitcode=1"
 DRMEMORY:=--memcheck="drmemory -light -batch -exit_code_if_errors 1"
 BS?=cmake
 CMAKE?=cmake
-CMAKE_GENERATOR?=Unix Makefiles
+CMAKE_GENERATOR?=Ninja
 TOOLSET?=clang
 CLANG_FORMAT?=clang-format
 CLANG_TIDY?=clang-tidy
@@ -17,6 +17,8 @@ MKDOCS?=mkdocs
 MKDOCS_THEME?=boost-modern
 MKDOCS_SITE?=site
 CXX_STANDARD?=14
+# CXX:=g++-12
+# export CXX
 
 .PHONY: all clean doc
 
@@ -28,8 +30,7 @@ all_bjam:
 	@cd extension && bjam -j2 -q --toolset=$(TOOLSET) --user-config=../.user-config.jam debug-symbols=off $($(MEMCHECK)) cxxflags=" $(CXXFLAGS)" linkflags=" $(LDFLAGS)"
 
 all_cmake:
-	@-mkdir build
-	cd build && $(CMAKE) -G "$(CMAKE_GENERATOR)" -DCMAKE_VERBOSE_MAKEFILE=ON -DCXX_STANDARD=$(CXX_STANDARD) .. && $(CMAKE) --build . && ctest --output-on-failure
+	$(CMAKE) -S $(CURDIR) -B build -G "$(CMAKE_GENERATOR)" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_STANDARD=$(CXX_STANDARD) && $(CMAKE) --build build && cd build && ctest --output-on-failure
 
 clean: clean_$(BS)
 
