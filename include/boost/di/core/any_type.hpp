@@ -62,7 +62,7 @@ struct any_type_ref {
 
   template <class T, class = __BOOST_DI_REQUIRES(is_referable__<T&&, TInjector, TRefError>::value),
             class = __BOOST_DI_REQUIRES(is_creatable__<T&&, TInjector, TError>::value)>
-  operator T &&() const {
+  operator T&&() const {
     return static_cast<const core::injector__<TInjector>&>(injector_).create_impl(aux::type<T&&>{});
   }
 
@@ -103,7 +103,7 @@ struct any_type_1st_ref {
   template <class T, class = __BOOST_DI_REQUIRES(!is_copy_ctor__<TParent, T>::value),
             class = __BOOST_DI_REQUIRES(is_referable__<T&&, TInjector, TRefError>::value),
             class = __BOOST_DI_REQUIRES(is_creatable__<T&&, TInjector, TError>::value)>
-  operator T &&() const {
+  operator T&&() const {
     return static_cast<const core::injector__<TInjector>&>(injector_).create_impl(aux::type<T&&>{});
   }
 
@@ -144,7 +144,7 @@ struct any_type_ref {
   }
 
   template <class T, class = __BOOST_DI_REQUIRES(is_referable__<T&&, TInjector>::value)>
-  operator T &&() const {
+  operator T&&() const {
     return static_cast<const core::injector__<TInjector>&>(injector_).create_successful_impl(aux::type<T&&>{});
   }
 
@@ -180,7 +180,7 @@ struct any_type_1st_ref {
 
   template <class T, class = __BOOST_DI_REQUIRES(!is_copy_ctor__<TParent, T>::value),
             class = __BOOST_DI_REQUIRES(is_referable__<T&&, TInjector>::value)>
-  operator T &&() const {
+  operator T&&() const {
     return static_cast<const core::injector__<TInjector>&>(injector_).create_successful_impl(aux::type<T&&>{});
   }
 
@@ -220,7 +220,7 @@ struct any_type_ref_fwd {
   operator T&() const;
 
   template <class T>
-  operator T &&() const;
+  operator T&&() const;
 
   template <class T>
   operator const T&() const;
@@ -245,7 +245,7 @@ struct any_type_1st_ref_fwd {
   operator T&() const;
 
   template <class T, class = __BOOST_DI_REQUIRES(!is_copy_ctor__<TParent, T>::value)>
-  operator T &&() const;
+  operator T&&() const;
 
   template <class T, class = __BOOST_DI_REQUIRES(!is_copy_ctor__<TParent, T>::value)>
   operator const T&() const;

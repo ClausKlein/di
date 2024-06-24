@@ -6,6 +6,7 @@
 //
 //<-
 #include "model.hpp"
+
 #include <boost/di.hpp>
 #include <cassert>
 //->

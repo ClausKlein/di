@@ -5,7 +5,9 @@
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #include "boost/di/wrappers/shared.hpp"
+
 #include <memory>
+
 #include "boost/di/aux_/utility.hpp"
 #if __has_include(<boost / shared_ptr.hpp>)
 #include <boost/shared_ptr.hpp>

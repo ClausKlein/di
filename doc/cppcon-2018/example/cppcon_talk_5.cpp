@@ -10,7 +10,7 @@ namespace di = boost::di;
 class Eniac {
  public:
    constexpr auto capacity() const { return 42;}
-   constexpr auto layout() { }
+   constexpr void layout() { }
 };
 
 struct ispeaker {
@@ -41,9 +41,9 @@ class attendees {
 };
 
 template<class T>
-concept bool RoomLike = not boost::di::aux::is_complete<T>::value or requires(T room) {
-  { room.capacity() } -> int
-  { room.layout()   }
+concept RoomLike = not boost::di::aux::is_complete<T>::value or requires(T room) {
+  { room.capacity() } -> int;
+  { room.layout()   };
 };
 
 template<RoomLike TRoom = class Room>

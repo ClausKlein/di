@@ -364,7 +364,7 @@ false_type has_shared_ptr__(...);
 
 #if !defined(BOOST_DI_DISABLE_SHARED_PTR_DEDUCTION)  // __pph__
 template <class T>
-auto has_shared_ptr__(T &&) -> is_valid_expr<decltype(std::shared_ptr<T>{})>;
+auto has_shared_ptr__(T&&) -> is_valid_expr<decltype(std::shared_ptr<T>{})>;
 #endif  // __pph__
 
 __BOOST_DI_HAS_METHOD(is_invocable, operator());
@@ -391,7 +391,7 @@ template <class TExpr>
 #if defined(__MSVC__)  // __pph__
 struct is_empty_expr<TExpr, valid_t<decltype(declval<TExpr>()())>> : integral_constant<bool, sizeof(TExpr) == 1> {
 };
-#else  // __pph__
+#else   // __pph__
 struct is_empty_expr<TExpr, valid_t<decltype(+declval<TExpr>()), decltype(declval<TExpr>()())>> : true_type {
 };
 #endif  // __pph__

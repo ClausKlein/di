@@ -14,6 +14,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
 #include "boost/di/aux_/compiler.hpp"
 #include "common/utils.hpp"
 
@@ -106,48 +107,54 @@ auto compail_fail(int id, const std::string& defines, const std::vector<std::str
 // ---------------------------------------------------------------------------
 
 test bind_instance_with_given_scope = [] {
-  expect_compile_fail("", errors(), int main() { di::make_injector(di::bind<int>().in(di::unique).to(42)); });
+  expect_compile_fail(
+      "", errors(), int main() { di::make_injector(di::bind<int>().in(di::unique).to(42)); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_instance_with_given_scope_v = [] {
-  expect_compile_fail("", errors(), int main() { di::make_injector(di::bind<int>.in(di::unique).to(42)); });
+  expect_compile_fail(
+      "", errors(), int main() { di::make_injector(di::bind<int>.in(di::unique).to(42)); });
 };
 #endif
 
 test bind_instance_with_given_type = [] {
-  expect_compile_fail("", errors(), struct i{}; struct impl
-                      : i{};
-                      int main() { di::make_injector(di::bind<i>().to(impl{}).to<impl>()); });
+  expect_compile_fail(
+      "", errors(), struct i{}; struct impl
+      : i{};
+      int main() { di::make_injector(di::bind<i>().to(impl{}).to<impl>()); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_instance_with_given_type_v = [] {
-  expect_compile_fail("", errors(), struct i{}; struct impl
-                      : i{};
-                      int main() { di::make_injector(di::bind<i>.to(impl{}).to<impl>()); });
+  expect_compile_fail(
+      "", errors(), struct i{}; struct impl
+      : i{};
+      int main() { di::make_injector(di::bind<i>.to(impl{}).to<impl>()); });
 };
 #endif
 
 test bind_named_to_named = [] {
-  expect_compile_fail("", errors(), struct a{}; struct b{};
-                      int main() { di::make_injector(di::bind<int>().named(a{}).named(b{})); });
+  expect_compile_fail(
+      "", errors(), struct a{}; struct b{}; int main() { di::make_injector(di::bind<int>().named(a{}).named(b{})); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_named_to_named_v = [] {
-  expect_compile_fail("", errors(), struct a{}; struct b{};
-                      int main() { di::make_injector(di::bind<int>.named(a{}).named(b{})); });
+  expect_compile_fail(
+      "", errors(), struct a{}; struct b{}; int main() { di::make_injector(di::bind<int>.named(a{}).named(b{})); });
 };
 #endif
 
 test bind_instance_with_given_value = [] {
-  expect_compile_fail("", errors(), int main() { di::make_injector(di::bind<int>().to<std::integral_constant<int>>(0)); });
+  expect_compile_fail(
+      "", errors(), int main() { di::make_injector(di::bind<int>().to<std::integral_constant<int>>(0)); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_instance_with_given_value_v = [] {
-  expect_compile_fail("", errors(), int main() { di::make_injector(di::bind<int>.to<std::integral_constant<int>>(0)); });
+  expect_compile_fail(
+      "", errors(), int main() { di::make_injector(di::bind<int>.to<std::integral_constant<int>>(0)); });
 };
 #endif
 
@@ -159,9 +166,10 @@ test bind_in_not_scopable_type = [] {
 #else
              "scope<.*dummy>::requires_<.*scope<.*>::is_referable,.*scope<.*>::try_create,.*scope<.*>::create>"
 #endif
-             );
+      );
 
-  expect_compile_fail("", errors_, struct dummy{}; int main() { di::make_injector(di::bind<int>().in(dummy{})); });
+  expect_compile_fail(
+      "", errors_, struct dummy{}; int main() { di::make_injector(di::bind<int>().in(dummy{})); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -173,21 +181,24 @@ test bind_in_not_scopable_type_v = [] {
 #else
              "scope<.*dummy>::requires_<.*scope<.*>::is_referable,.*scope<.*>::try_create,.*scope<.*>::create>"
 #endif
-             );
+      );
 
-  expect_compile_fail("", errors_, struct dummy{}; int main() { di::make_injector(di::bind<int>.in(dummy{})); });
+  expect_compile_fail(
+      "", errors_, struct dummy{}; int main() { di::make_injector(di::bind<int>.in(dummy{})); });
 };
 #endif
 
 test bind_has_disallowed_qualifiers_expected = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*int.*\\*>::has_disallowed_qualifiers");
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int*>()); });
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int*>()); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_has_disallowed_qualifiers_expected_v = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*int.*\\*>::has_disallowed_qualifiers");
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int*>); });
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int*>); });
 };
 #endif
 
@@ -198,8 +209,9 @@ test bind_has_disallowed_qualifiers_given = [] {
 #else
                         "type_<const.*int.*&>::has_disallowed_qualifiers"
 #endif
-                        );
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int>().to<const int&>()); });
+  );
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int>().to<const int&>()); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -210,32 +222,37 @@ test bind_has_disallowed_qualifiers_given_v = [] {
 #else
                         "type_<const.*int.*&>::has_disallowed_qualifiers"
 #endif
-                        );
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int>.to<const int&>()); });
+  );
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int>.to<const int&>()); });
 };
 #endif
 
 test bind_has_disallowed_qualifiers_expected_complex = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*shared_ptr.*int.*>::has_disallowed_qualifiers");
-  expect_compile_fail("<include> memory", errors_, int main() { di::make_injector(di::bind<std::shared_ptr<int>>()); });
+  expect_compile_fail(
+      "<include> memory", errors_, int main() { di::make_injector(di::bind<std::shared_ptr<int>>()); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_has_disallowed_qualifiers_expected_complex_v = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*shared_ptr.*int.*>::has_disallowed_qualifiers");
-  expect_compile_fail("<include> memory", errors_, int main() { di::make_injector(di::bind<std::shared_ptr<int>>); });
+  expect_compile_fail(
+      "<include> memory", errors_, int main() { di::make_injector(di::bind<std::shared_ptr<int>>); });
 };
 #endif
 
 test bind_has_disallowed_qualifiers_given_complex = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*shared_ptr.*int.*>::has_disallowed_qualifiers");
-  expect_compile_fail("<include> memory", errors_, int main() { di::make_injector(di::bind<int, std::shared_ptr<int>>()); });
+  expect_compile_fail(
+      "<include> memory", errors_, int main() { di::make_injector(di::bind<int, std::shared_ptr<int>>()); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_has_disallowed_qualifiers_given_complex_v = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*shared_ptr.*int.*>::has_disallowed_qualifiers");
-  expect_compile_fail("<include> memory", errors_, int main() { di::make_injector(di::bind<int, std::shared_ptr<int>>); });
+  expect_compile_fail(
+      "<include> memory", errors_, int main() { di::make_injector(di::bind<int, std::shared_ptr<int>>); });
 };
 #endif
 
@@ -248,9 +265,10 @@ test bind_narrowed_type = [] {
 #else
                         "type_<.*double>::is_not_related_to<int>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int>().to<double>()); });
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int>().to<double>()); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -263,9 +281,10 @@ test bind_narrowed_type_v = [] {
 #else
                         "type_<.*double>::is_not_related_to<int>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int>.to<double>()); });
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int>.to<double>()); });
 };
 #endif
 
@@ -278,11 +297,12 @@ test bind_not_compatible_types = [] {
 #else
                         "type_<.*impl>::is_not_related_to<int>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, struct i{}; struct impl
-                      : i{};
-                      int main() { di::make_injector(di::bind<int>().to<impl>()); });
+  expect_compile_fail(
+      "", errors_, struct i{}; struct impl
+      : i{};
+      int main() { di::make_injector(di::bind<int>().to<impl>()); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -295,9 +315,12 @@ test bind_not_compatible_types_v = [] {
 #else
                         "type_<.*impl>::is_not_related_to<int>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, struct i{}; struct impl : i{}; int main() { di::make_injector(di::bind<int>.to<impl>()); });
+  expect_compile_fail(
+      "", errors_, struct i{}; struct impl
+      : i{};
+      int main() { di::make_injector(di::bind<int>.to<impl>()); });
 };
 #endif
 
@@ -308,11 +331,12 @@ test bind_not_compatible_instance = [] {
 #else
                         "type_<.*impl>::is_not_related_to<int>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, struct i{}; struct impl
-                      : i{};
-                      int main() { di::make_injector(di::bind<int>().to(impl{})); });
+  expect_compile_fail(
+      "", errors_, struct i{}; struct impl
+      : i{};
+      int main() { di::make_injector(di::bind<int>().to(impl{})); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -323,9 +347,12 @@ test bind_not_compatible_instance_v = [] {
 #else
                         "type_<.*impl>::is_not_related_to<int>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, struct i{}; struct impl : i{}; int main() { di::make_injector(di::bind<int>.to(impl{})); });
+  expect_compile_fail(
+      "", errors_, struct i{}; struct impl
+      : i{};
+      int main() { di::make_injector(di::bind<int>.to(impl{})); });
 };
 #endif
 
@@ -338,9 +365,10 @@ test bind_not_compatible_narrowed_types = [] {
 #else
                         "type_<.*long.*int>::is_not_related_to<int>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int>().to(42l)); });
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int>().to(42l)); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -353,9 +381,10 @@ test bind_not_compatible_narrowed_types_v = [] {
 #else
                         "type_<.*long.*int>::is_not_related_to<int>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int>.to(42l)); });
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int>.to(42l)); });
 };
 #endif
 
@@ -368,12 +397,13 @@ test bind_not_compatible_initializer_list = [] {
 #else
                         "type_<const.*char.*\\*>::is_not_related_to<int>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, int main() {
-    auto il = {"a", "b"};
-    di::make_injector(di::bind<int[]>().to(il));
-  });
+  expect_compile_fail(
+      "", errors_, int main() {
+        auto il = {"a", "b"};
+        di::make_injector(di::bind<int[]>().to(il));
+      });
 };
 
 #if defined(__cpp_variable_templates)
@@ -386,12 +416,13 @@ test bind_not_compatible_initializer_list_v = [] {
 #else
                         "type_<const.*char.*\\*>::is_not_related_to<int>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, int main() {
-    auto il = {"a", "b"};
-    di::make_injector(di::bind<int[]>.to(il));
-  });
+  expect_compile_fail(
+      "", errors_, int main() {
+        auto il = {"a", "b"};
+        di::make_injector(di::bind<int[]>.to(il));
+      });
 };
 #endif
 
@@ -404,11 +435,12 @@ test bind_any_of_not_related = [] {
 #else
                         "type_<.*c>::is_not_related_to<.*a>.*type_<.*c>::is_not_related_to<.*b>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, struct a{}; struct b
-                      : a{};
-                      struct c{}; int main() { di::make_injector(di::bind<a, b>().to<c>()); });
+  expect_compile_fail(
+      "", errors_, struct a{}; struct b
+      : a{};
+      struct c{}; int main() { di::make_injector(di::bind<a, b>().to<c>()); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -421,11 +453,12 @@ test bind_any_of_not_related_v = [] {
 #else
                         "type_<.*c>::is_not_related_to<.*a>.*type_<.*c>::is_not_related_to<.*b>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, struct a{}; struct b
-                      : a{};
-                      struct c{}; int main() { di::make_injector(di::bind<a, b>.to<c>()); });
+  expect_compile_fail(
+      "", errors_, struct a{}; struct b
+      : a{};
+      struct c{}; int main() { di::make_injector(di::bind<a, b>.to<c>()); });
 };
 #endif
 
@@ -438,9 +471,10 @@ test bind_deduced_not_related = [] {
 #else
                         "type_<.*a>::is_not_related_to<.*deduced>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, struct a{}; int main() { di::make_injector(di::bind<>().to<a>()); });
+  expect_compile_fail(
+      "", errors_, struct a{}; int main() { di::make_injector(di::bind<>().to<a>()); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -453,9 +487,10 @@ test bind_deduced_not_related_v = [] {
 #else
                         "type_<.*a>::is_not_related_to<.*deduced>"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, struct a{}; int main() { di::make_injector(di::bind<>.to<a>()); });
+  expect_compile_fail(
+      "", errors_, struct a{}; int main() { di::make_injector(di::bind<>.to<a>()); });
 };
 #endif
 
@@ -466,16 +501,17 @@ test bind_is_abstract_type = [] {
 #else
                         "type_<.*impl>::is_abstract"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_,
-                      struct i {
-                        virtual ~i() noexcept = default;
-                        virtual void dummy() = 0;
-                      };
-                      struct impl
-                      : i{};
-                      struct c{c(i*){}}; int main() { di::make_injector(di::bind<i>().to<impl>()); });
+  expect_compile_fail(
+      "", errors_,
+      struct i {
+        virtual ~i() noexcept = default;
+        virtual void dummy() = 0;
+      };
+      struct impl
+      : i{};
+      struct c{c(i*){}}; int main() { di::make_injector(di::bind<i>().to<impl>()); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -486,16 +522,17 @@ test bind_is_abstract_type_v = [] {
 #else
                         "type_<.*impl>::is_abstract"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_,
-                      struct i {
-                        virtual ~i() noexcept = default;
-                        virtual void dummy() = 0;
-                      };
-                      struct impl
-                      : i{};
-                      struct c{c(i*){}}; int main() { di::make_injector(di::bind<i>.to<impl>()); });
+  expect_compile_fail(
+      "", errors_,
+      struct i {
+        virtual ~i() noexcept = default;
+        virtual void dummy() = 0;
+      };
+      struct impl
+      : i{};
+      struct c{c(i*){}}; int main() { di::make_injector(di::bind<i>.to<impl>()); });
 };
 #endif
 
@@ -506,16 +543,17 @@ test bind_is_abstract_type_with_missing_error = [] {
 #else
                         "type_<.*impl>::is_abstract", "pure.*impl", "virtual void dummy().*=.*0"
 #endif
-                        );
+  );
 
-  expect_compile_fail("-DBOOST_DI_CFG_DIAGNOSTICS_LEVEL=2", errors_,
-                      struct i {
-                        virtual ~i() noexcept = default;
-                        virtual void dummy() = 0;
-                      };
-                      struct impl
-                      : i{};
-                      struct c{c(i*){}}; int main() { di::make_injector(di::bind<i>().to<impl>()); });
+  expect_compile_fail(
+      "-DBOOST_DI_CFG_DIAGNOSTICS_LEVEL=2", errors_,
+      struct i {
+        virtual ~i() noexcept = default;
+        virtual void dummy() = 0;
+      };
+      struct impl
+      : i{};
+      struct c{c(i*){}}; int main() { di::make_injector(di::bind<i>().to<impl>()); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -526,16 +564,17 @@ test bind_is_abstract_type_with_missing_error_v = [] {
 #else
                         "type_<.*impl>::is_abstract", "pure.*impl", "virtual void dummy().*=.*0"
 #endif
-                        );
+  );
 
-  expect_compile_fail("-DBOOST_DI_CFG_DIAGNOSTICS_LEVEL=2", errors_,
-                      struct i {
-                        virtual ~i() noexcept = default;
-                        virtual void dummy() = 0;
-                      };
-                      struct impl
-                      : i{};
-                      struct c{c(i*){}}; int main() { di::make_injector(di::bind<i>.to<impl>()); });
+  expect_compile_fail(
+      "-DBOOST_DI_CFG_DIAGNOSTICS_LEVEL=2", errors_,
+      struct i {
+        virtual ~i() noexcept = default;
+        virtual void dummy() = 0;
+      };
+      struct impl
+      : i{};
+      struct c{c(i*){}}; int main() { di::make_injector(di::bind<i>.to<impl>()); });
 };
 #endif
 
@@ -546,16 +585,17 @@ test bind_is_abstract_type_named = [] {
 #else
                         "type_<.*impl>::is_abstract"
 #endif
-                        );
-  expect_compile_fail("", errors_,
-                      struct i {
-                        virtual ~i() noexcept = default;
-                        virtual void dummy() = 0;
-                      };
-                      struct impl
-                      : i{};
-                      struct dummy{}; struct c{BOOST_DI_INJECT(c, (named = dummy{}) i*){}};
-                      int main() { di::make_injector(di::bind<i>().named(dummy{}).to<impl>()); });
+  );
+  expect_compile_fail(
+      "", errors_,
+      struct i {
+        virtual ~i() noexcept = default;
+        virtual void dummy() = 0;
+      };
+      struct impl
+      : i{};
+      struct dummy{}; struct c{BOOST_DI_INJECT(c, (named = dummy{}) i*){}};
+      int main() { di::make_injector(di::bind<i>().named(dummy{}).to<impl>()); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -566,16 +606,17 @@ test bind_is_abstract_type_named_v = [] {
 #else
                         "type_<.*impl>::is_abstract"
 #endif
-                        );
-  expect_compile_fail("", errors_,
-                      struct i {
-                        virtual ~i() noexcept = default;
-                        virtual void dummy() = 0;
-                      };
-                      struct impl
-                      : i{};
-                      struct dummy{}; struct c{BOOST_DI_INJECT(c, (named = dummy{}) i*){}};
-                      int main() { di::make_injector(di::bind<i>.named(dummy{}).to<impl>()); });
+  );
+  expect_compile_fail(
+      "", errors_,
+      struct i {
+        virtual ~i() noexcept = default;
+        virtual void dummy() = 0;
+      };
+      struct impl
+      : i{};
+      struct dummy{}; struct c{BOOST_DI_INJECT(c, (named = dummy{}) i*){}};
+      int main() { di::make_injector(di::bind<i>.named(dummy{}).to<impl>()); });
 };
 #endif
 
@@ -586,8 +627,9 @@ test bind_deduced_instance_repeated = [] {
 #else
                         "type_<.*int>::is_bound_more_than_once"
 #endif
-                        );
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<>().to(42), di::bind<>().to(42)); });
+  );
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<>().to(42), di::bind<>().to(42)); });
 };
 
 #if defined(__cpp_variable_templates)
@@ -598,122 +640,137 @@ test bind_deduced_instance_repeated_v = [] {
 #else
                         "type_<.*int>::is_bound_more_than_once"
 #endif
-                        );
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<>.to(42), di::bind<>.to(42)); });
+  );
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<>.to(42), di::bind<>.to(42)); });
 };
 #endif
 
 test bind_deduced_instance_repeated_mix = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*int>::is_bound_more_than_once");
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int>().to(42), di::bind<>().to(42)); });
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int>().to(42), di::bind<>().to(42)); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_deduced_instance_repeated_mix_v = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*int>::is_bound_more_than_once");
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int>().to(42), di::bind<>.to(42)); });
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int>().to(42), di::bind<>.to(42)); });
 };
 #endif
 
 test bind_repeated = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*i>::is_bound_more_than_once");
-  expect_compile_fail("", errors_, struct i{}; struct impl1
-                      : i{};
-                      struct impl2
-                      : i{};
-                      int main() { di::make_injector(di::bind<i>().to<impl1>(), di::bind<i>().to<impl1>()); });
+  expect_compile_fail(
+      "", errors_, struct i{}; struct impl1
+      : i{};
+      struct impl2
+      : i{};
+      int main() { di::make_injector(di::bind<i>().to<impl1>(), di::bind<i>().to<impl1>()); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_repeated_v = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*i>::is_bound_more_than_once");
-  expect_compile_fail("", errors_, struct i{}; struct impl1
-                      : i{};
-                      struct impl2
-                      : i{};
-                      int main() { di::make_injector(di::bind<i>.to<impl1>(), di::bind<i>.to<impl1>()); });
+  expect_compile_fail(
+      "", errors_, struct i{}; struct impl1
+      : i{};
+      struct impl2
+      : i{};
+      int main() { di::make_injector(di::bind<i>.to<impl1>(), di::bind<i>.to<impl1>()); });
 };
 #endif
 
 #if defined(__cpp_variable_templates)
 test bind_repeated_mix_v = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*i>::is_bound_more_than_once");
-  expect_compile_fail("", errors_, struct i{}; struct impl1
-                      : i{};
-                      struct impl2
-                      : i{};
-                      int main() { di::make_injector(di::bind<i>.to<impl1>(), di::bind<i>().to<impl1>()); });
+  expect_compile_fail(
+      "", errors_, struct i{}; struct impl1
+      : i{};
+      struct impl2
+      : i{};
+      int main() { di::make_injector(di::bind<i>.to<impl1>(), di::bind<i>().to<impl1>()); });
 };
 #endif
 
 test bind_to_different_types = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*i>::is_bound_more_than_once");
-  expect_compile_fail("", errors_, struct i{}; struct impl1
-                      : i{};
-                      struct impl2
-                      : i{};
-                      int main() { di::make_injector(di::bind<i>().to<impl1>(), di::bind<i>().to<impl2>()); });
+  expect_compile_fail(
+      "", errors_, struct i{}; struct impl1
+      : i{};
+      struct impl2
+      : i{};
+      int main() { di::make_injector(di::bind<i>().to<impl1>(), di::bind<i>().to<impl2>()); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_to_different_types_v = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*i>::is_bound_more_than_once");
-  expect_compile_fail("", errors_, struct i{}; struct impl1
-                      : i{};
-                      struct impl2
-                      : i{};
-                      int main() { di::make_injector(di::bind<i>.to<impl1>(), di::bind<i>.to<impl2>()); });
+  expect_compile_fail(
+      "", errors_, struct i{}; struct impl1
+      : i{};
+      struct impl2
+      : i{};
+      int main() { di::make_injector(di::bind<i>.to<impl1>(), di::bind<i>.to<impl2>()); });
 };
 #endif
 
 test bind_instance_repeated = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*int>::is_bound_more_than_once");
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int>().to(42), di::bind<int>().to(87)); });
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int>().to(42), di::bind<int>().to(87)); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_instance_repeated_v = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*int>::is_bound_more_than_once");
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int>.to(42), di::bind<int>.to(87)); });
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int>.to(42), di::bind<int>.to(87)); });
 };
 #endif
 
 #if defined(__cpp_variable_templates)
 test bind_instance_repeated_mix_v = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*int>::is_bound_more_than_once");
-  expect_compile_fail("", errors_, int main() { di::make_injector(di::bind<int>().to(42), di::bind<int>.to(87)); });
+  expect_compile_fail(
+      "", errors_, int main() { di::make_injector(di::bind<int>().to(42), di::bind<int>.to(87)); });
 };
 #endif
 
 test bind_multiple_times = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*i>::is_bound_more_than_once");
 
-  expect_compile_fail("", errors_, struct i{}; struct impl1
-                      : i{};
-                      struct impl2
-                      : i{};
-                      int main() { di::make_injector(di::bind<i>().to<impl1>(), di::bind<i>().to<impl2>()); });
+  expect_compile_fail(
+      "", errors_, struct i{}; struct impl1
+      : i{};
+      struct impl2
+      : i{};
+      int main() { di::make_injector(di::bind<i>().to<impl1>(), di::bind<i>().to<impl2>()); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_multiple_times_v = [] {
   auto errors_ = errors("constraint not satisfied", "type_<.*i>::is_bound_more_than_once");
 
-  expect_compile_fail("", errors_, struct i{}; struct impl1
-                      : i{};
-                      struct impl2
-                      : i{};
-                      int main() { di::make_injector(di::bind<i>.to<impl1>(), di::bind<i>.to<impl2>()); });
+  expect_compile_fail(
+      "", errors_, struct i{}; struct impl1
+      : i{};
+      struct impl2
+      : i{};
+      int main() { di::make_injector(di::bind<i>.to<impl1>(), di::bind<i>.to<impl2>()); });
 };
 #endif
 
 test bind_in_not_scopable = [] {
-  expect_compile_fail("", errors(), struct not_scopable{}; int main() { di::bind<int>().in(not_scopable{}); });
+  expect_compile_fail(
+      "", errors(), struct not_scopable{}; int main() { di::bind<int>().in(not_scopable{}); });
 };
 
 #if defined(__cpp_variable_templates)
 test bind_in_not_scopable_v = [] {
-  expect_compile_fail("", errors(), struct not_scopable{}; int main() { di::bind<int>.in(not_scopable{}); });
+  expect_compile_fail(
+      "", errors(), struct not_scopable{}; int main() { di::bind<int>.in(not_scopable{}); });
 };
 #endif
 
@@ -726,23 +783,26 @@ test make_injector_wrong_arg = [] {
 #else
                         "type_<.*dummy>::is_neither_a_dependency_nor_an_injector"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, struct dummy{}; int main() { di::make_injector(dummy{}); });
+  expect_compile_fail(
+      "", errors_, struct dummy{}; int main() { di::make_injector(dummy{}); });
 };
 
 test make_injector_with_from_not_movable = [] {
-  expect_compile_fail("", errors(), struct c{}; int main() {
-    auto module = di::make_injector();
-    di::make_injector(module);
-  });
+  expect_compile_fail(
+      "", errors(), struct c{}; int main() {
+        auto module = di::make_injector();
+        di::make_injector(module);
+      });
 };
 
 test make_injector_with_from_not_movable_exposed = [] {
-  expect_compile_fail("", errors(), struct c{}; int main() {
-    auto module = di::make_injector();
-    di::injector<> injector = di::make_injector(module);
-  });
+  expect_compile_fail(
+      "", errors(), struct c{}; int main() {
+        auto module = di::make_injector();
+        di::injector<> injector = di::make_injector(module);
+      });
 };
 
 test exposed_multiple_times = [] {
@@ -752,15 +812,17 @@ test exposed_multiple_times = [] {
 #else
                         "type_<.*c>::is_bound_more_than_once"
 #endif
-                        );
+  );
 
-  expect_compile_fail("", errors_, struct c{}; int main() { di::injector<c, c> injector = di::make_injector(); });
+  expect_compile_fail(
+      "", errors_, struct c{}; int main() { di::injector<c, c> injector = di::make_injector(); });
 };
 
 // ---------------------------------------------------------------------------
 
 test not_configurable_config = [] {
-  expect_compile_fail("", errors(), struct dummy_config{}; int main() { di::make_injector<dummy_config>(); });
+  expect_compile_fail(
+      "", errors(), struct dummy_config{}; int main() { di::make_injector<dummy_config>(); });
 };
 
 test make_policies_with_non_const_policy = [] {
@@ -770,7 +832,7 @@ test make_policies_with_non_const_policy = [] {
 #else
                         "policy<.*non_const_policy>::requires_<.*call_operator_with_one_argument>"
 #endif
-                        );
+  );
 
     expect_compile_fail("", errors_,
 	struct non_const_policy {
@@ -807,7 +869,7 @@ test config_wrong_policy = [] {
 #else
                         "policy<.*int>::requires_<.*call_operator_with_one_argument>"
 #endif
-                        );
+  );
 
     expect_compile_fail("", errors_,
         struct test_config : di::config {
@@ -827,7 +889,7 @@ int main() { di::make_injector<test_config>(); }
 #else
                             "policy<.*dummy>::requires_<.*call_operator_with_one_argument>"
 #endif
-                            );
+      );
 
       expect_compile_fail("", errors_,
         struct test_config : di::config {
@@ -847,7 +909,7 @@ int main() { di::make_injector<test_config>(); }
 #else
                             "provider<.*dummy>::requires_<.*get,.*is_creatable>"
 #endif
-                            );
+      );
 
       expect_compile_fail("", errors_,
         struct test_config : di::config {
@@ -870,7 +932,7 @@ int main() { di::make_injector<test_config>(); }
                             "..."
                             ")>"
 #endif
-                            );
+      );
 
     expect_compile_fail("", errors_,
         struct test_config : di::config {
@@ -895,12 +957,13 @@ int main() { di::make_injector<test_config>(); }
     // ---------------------------------------------------------------------------
 
     test mismatch_between_ctor_declaration_and_definition = [] {
-      expect_compile_fail("", errors(), struct c { BOOST_DI_INJECT(c, int, double); }; c::c(int) {} int main(){});
+      expect_compile_fail(
+          "", errors(), struct c { BOOST_DI_INJECT(c, int, double); }; c::c(int) {} int main(){});
     };
 
     test mismatch_between_ctor_declaration_and_definition_named = [] {
-      expect_compile_fail("", errors(), struct c { BOOST_DI_INJECT(c, int, (named = int{}) double); };
-                          c::c(double, int) {} int main(){});
+      expect_compile_fail(
+          "", errors(), struct c { BOOST_DI_INJECT(c, int, (named = int{}) double); }; c::c(double, int) {} int main(){});
     };
 
     // ---------------------------------------------------------------------------
@@ -915,14 +978,15 @@ int main() { di::make_injector<test_config>(); }
           ,
           "create<c>()", "type is not bound, did you forget to add: 'di::bind<interface>.to<implementation>()'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("", errors_,
-                          struct i {
-                            virtual ~i() noexcept = default;
-                            virtual void dummy() = 0;
-                          };
-                          struct c{c(i*){}}; int main() { di::make_injector().create<c>(); });
+      expect_compile_fail(
+          "", errors_,
+          struct i {
+            virtual ~i() noexcept = default;
+            virtual void dummy() = 0;
+          };
+          struct c{c(i*){}}; int main() { di::make_injector().create<c>(); });
     };
 
     test create_polymorphic_type_without_binding_ref = [] {
@@ -935,14 +999,15 @@ int main() { di::make_injector<test_config>(); }
           ,
           "create<c>()", "type is not bound, did you forget to add: 'di::bind<interface>.to<implementation>()'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("", errors_,
-                          struct i {
-                            virtual ~i() noexcept = default;
-                            virtual void dummy() = 0;
-                          };
-                          struct c{c(i&){}}; int main() { di::make_injector().create<c>(); });
+      expect_compile_fail(
+          "", errors_,
+          struct i {
+            virtual ~i() noexcept = default;
+            virtual void dummy() = 0;
+          };
+          struct c{c(i&){}}; int main() { di::make_injector().create<c>(); });
     };
 
     test create_polymorphic_type_without_binding_using_multi_bindings = [] {
@@ -955,17 +1020,18 @@ int main() { di::make_injector<test_config>(); }
           ,
           "create<c>()", "type is not bound, did you forget to add: 'di::bind<interface>.to<implementation>()'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("<include> memory <include> vector", errors_,
-                          struct i {
-                            virtual ~i() noexcept = default;
-                            virtual void dummy() = 0;
-                          };
-                          struct c{c(std::vector<std::unique_ptr<i>>){}}; int main() {
-                            auto injector = di::make_injector(di::bind<i* []>().to<i, i>());
-                            injector.create<c>();
-                          });
+      expect_compile_fail(
+          "<include> memory <include> vector", errors_,
+          struct i {
+            virtual ~i() noexcept = default;
+            virtual void dummy() = 0;
+          };
+          struct c{c(std::vector<std::unique_ptr<i>>){}}; int main() {
+            auto injector = di::make_injector(di::bind<i*[]>().to<i, i>());
+            injector.create<c>();
+          });
     };
 
     test create_polymorphic_type_without_binding_using_multi_bindings_named = [] {
@@ -978,20 +1044,21 @@ int main() { di::make_injector<test_config>(); }
           ,
           "create<c>()", "type is not bound, did you forget to add: 'di::bind<interface>.named\\(name\\).to<implementation>()'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("<include> memory <include> set", errors_,
-                          struct i {
-                            virtual ~i() noexcept = default;
-                            virtual void dummy() = 0;
-                          };
-                          struct impl
-                          : i{void dummy() override{}};
-                          struct c{c(std::set<std::unique_ptr<i>>){}}; int main() {
-                            auto injector = di::make_injector(di::bind<i* []>().to<i, di::named<class I>>(),
-                                                              di::bind<i>().to<impl>(), di::bind<i>().named<class I>());
-                            injector.create<c>();
-                          });
+      expect_compile_fail(
+          "<include> memory <include> set", errors_,
+          struct i {
+            virtual ~i() noexcept = default;
+            virtual void dummy() = 0;
+          };
+          struct impl
+          : i{void dummy() override{}};
+          struct c{c(std::set<std::unique_ptr<i>>){}}; int main() {
+            auto injector = di::make_injector(di::bind<i*[]>().to<i, di::named<class I>>(), di::bind<i>().to<impl>(),
+                                              di::bind<i>().named<class I>());
+            injector.create<c>();
+          });
     };
 
     test create_polymorphic_type_without_binding_named = [] {
@@ -1004,15 +1071,16 @@ int main() { di::make_injector<test_config>(); }
           ,
           "type is not bound, did you forget to add: 'di::bind<interface>.named\\(name\\).to<implementation>()'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("", errors_,
-                          struct i {
-                            virtual ~i() noexcept = default;
-                            virtual void dummy() = 0;
-                          };
-                          struct dummy{}; struct c{BOOST_DI_INJECT(c, (named = dummy{}) i*){}};
-                          int main() { di::make_injector().create<c>(); });
+      expect_compile_fail(
+          "", errors_,
+          struct i {
+            virtual ~i() noexcept = default;
+            virtual void dummy() = 0;
+          };
+          struct dummy{}; struct c{BOOST_DI_INJECT(c, (named = dummy{}) i*){}};
+          int main() { di::make_injector().create<c>(); });
     };
 
     test exposed_not_creatable = [] {
@@ -1025,15 +1093,16 @@ int main() { di::make_injector<test_config>(); }
           ,
           "create<T>", "type is not bound, did you forget to add: 'di::bind<interface>.to<implementation>()'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("<include> memory", errors_,
-                          struct i {
-                            virtual ~i() noexcept = default;
-                            virtual void dummy() = 0;
-                          };
-                          struct c{c(int, std::unique_ptr<i>){}};
-                          int main() { di::injector<std::unique_ptr<i>> injector = di::make_injector(); });
+      expect_compile_fail(
+          "<include> memory", errors_,
+          struct i {
+            virtual ~i() noexcept = default;
+            virtual void dummy() = 0;
+          };
+          struct c{c(int, std::unique_ptr<i>){}};
+          int main() { di::injector<std::unique_ptr<i>> injector = di::make_injector(); });
     };
 
     test exposed_polymorphic_type_without_binding = [] {
@@ -1046,16 +1115,17 @@ int main() { di::make_injector<test_config>(); }
           ,
           "create<T>", "type is not bound, did you forget to add: 'di::bind<interface>.to<implementation>()'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("<include> memory", errors_,
-                          struct i {
-                            virtual ~i() noexcept = default;
-                            virtual void dummy() = 0;
-                          };
-                          struct c{explicit c(std::shared_ptr<i>){}}; int main() {
-                            di::injector<c> injector = di::make_injector();  // di::bind<i>().to<impl>()
-                          });
+      expect_compile_fail(
+          "<include> memory", errors_,
+          struct i {
+            virtual ~i() noexcept = default;
+            virtual void dummy() = 0;
+          };
+          struct c{explicit c(std::shared_ptr<i>){}}; int main() {
+            di::injector<c> injector = di::make_injector();  // di::bind<i>().to<impl>()
+          });
     };
 
     test exposed_type_injector_conversions_fail = [] {
@@ -1068,25 +1138,24 @@ int main() { di::make_injector<test_config>(); }
           ,
           "create<T>", "type is not bound, did you forget to add: 'di::bind<interface>.to<implementation>()'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("<include> memory", errors_,
-                          struct i1 {
-                            virtual ~i1() noexcept = default;
-                            virtual void dummy() = 0;
-                          };
-                          struct impl1
-                          : i1{void dummy() override{}};
-                          struct i2 {
-                            virtual ~i2() noexcept = default;
-                            virtual void dummy() = 0;
-                          };
-                          int main() {
-                            auto module = []() -> di::injector<std::unique_ptr<i1>> {
-                              return di::make_injector(di::bind<i1>().to<impl1>());
-                            };
-                            di::injector<std::unique_ptr<i2>> injector = di::make_injector(module());
-                          });
+      expect_compile_fail(
+          "<include> memory", errors_,
+          struct i1 {
+            virtual ~i1() noexcept = default;
+            virtual void dummy() = 0;
+          };
+          struct impl1
+          : i1{void dummy() override{}};
+          struct i2 {
+            virtual ~i2() noexcept = default;
+            virtual void dummy() = 0;
+          };
+          int main() {
+            auto module = []() -> di::injector<std::unique_ptr<i1>> { return di::make_injector(di::bind<i1>().to<impl1>()); };
+            di::injector<std::unique_ptr<i2>> injector = di::make_injector(module());
+          });
     };
 
     test injector_singleton_by_copy = [] {
@@ -1100,12 +1169,13 @@ int main() { di::make_injector<test_config>(); }
           "scoped object is not convertible to the requested type, did you mistake the scope: "
           "'di::bind<T>.in\\(scope\\)'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("", errors_, struct c{c(int*){}}; int main() {
-        auto injector = di::make_injector(di::bind<int>().in(di::singleton));
-        injector.create<c>();
-      });
+      expect_compile_fail(
+          "", errors_, struct c{c(int*){}}; int main() {
+            auto injector = di::make_injector(di::bind<int>().in(di::singleton));
+            injector.create<c>();
+          });
     };
 
     test bind_instance_not_convertible = [] {
@@ -1118,12 +1188,13 @@ int main() { di::make_injector<test_config>(); }
           ,
           "instance is not convertible to the requested type, verify binding: 'di::bind<T>.to\\(value\\)'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("", errors_, struct c{c(int*){}}; int main() {
-        auto injector = di::make_injector(di::bind<int>().to(42));
-        injector.create<c>();
-      });
+      expect_compile_fail(
+          "", errors_, struct c{c(int*){}}; int main() {
+            auto injector = di::make_injector(di::bind<int>().to(42));
+            injector.create<c>();
+          });
     };
 
     test bind_instance_not_referable = [] {
@@ -1136,13 +1207,14 @@ int main() { di::make_injector<test_config>(); }
           ,
           "instance is not convertible to the requested type, verify binding: 'di::bind<T>.to\\(value\\)'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("", errors_, struct c{c(int&){}}; int main() {
-        auto injector = di::make_injector(di::bind<int>().to(42)  // lvalue can't be converted to a reference
-                                          );
-        injector.create<c>();
-      });
+      expect_compile_fail(
+          "", errors_, struct c{c(int&){}}; int main() {
+            auto injector = di::make_injector(di::bind<int>().to(42)  // lvalue can't be converted to a reference
+            );
+            injector.create<c>();
+          });
     };
 
     test bind_instance_not_referable_named = [] {
@@ -1155,13 +1227,14 @@ int main() { di::make_injector<test_config>(); }
           ,
           "instance is not convertible to the requested type, verify binding: 'di::bind<T>.to\\(value\\)'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("", errors_, struct dummy{}; struct c{BOOST_DI_INJECT(c, (named = dummy{}) int&){}}; int main() {
-        auto injector = di::make_injector(di::bind<int>().named(dummy{}).to(42)  // lvalue can't be converted to a reference
-                                          );
-        injector.create<c>();
-      });
+      expect_compile_fail(
+          "", errors_, struct dummy{}; struct c{BOOST_DI_INJECT(c, (named = dummy{}) int&){}}; int main() {
+            auto injector = di::make_injector(di::bind<int>().named(dummy{}).to(42)  // lvalue can't be converted to a reference
+            );
+            injector.create<c>();
+          });
     };
 
     test policy_constructible = [] {
@@ -1177,7 +1250,7 @@ int main() { di::make_injector<test_config>(); }
 #else
           "type<int>::not_allowed_by", "type<double>::not_allowed_by", "type<float>::not_allowed_by"
 #endif
-          );
+      );
 
     expect_compile_fail("", errors_,
         class config : public di::config {
@@ -1217,27 +1290,29 @@ int main() { di::make_injector<test_config>(); }
           ,
           "create<c>()", "type is not bound, did you forget to add: 'di::bind<interface>.to<implementation>()'?"
 #endif
-          );
+      );
 
-      expect_compile_fail("-DBOOST_DI_CFG_DIAGNOSTICS_LEVEL=2", errors_,
-                          struct i {
-                            virtual ~i() noexcept = default;
-                            virtual void dummy() = 0;
-                          };
-                          struct c2{c2(i*){}}; struct c1{c1(int, double, const c2&){}}; struct c{c(int, c1){}};
-                          int main() { di::make_injector().create<c>(); });
+      expect_compile_fail(
+          "-DBOOST_DI_CFG_DIAGNOSTICS_LEVEL=2", errors_,
+          struct i {
+            virtual ~i() noexcept = default;
+            virtual void dummy() = 0;
+          };
+          struct c2{c2(i*){}}; struct c1{c1(int, double, const c2&){}}; struct c{c(int, c1){}};
+          int main() { di::make_injector().create<c>(); });
     };
 
     // ---------------------------------------------------------------------------
 
     test ctor_inject_limit_out_of_range = [] {
-      expect_compile_fail("-DBOOST_DI_CFG_CTOR_LIMIT_SIZE=3",
-                          errors("Number of constructor arguments is out of range - see BOOST_DI_CFG_CTOR_LIMIT_SIZE"),
-                          struct c{BOOST_DI_INJECT(c, int, int, int, int){}};
-                          int main() {
-                            auto injector = di::make_injector();
-                            injector.create<c>();
-                          });
+      expect_compile_fail(
+          "-DBOOST_DI_CFG_CTOR_LIMIT_SIZE=3",
+          errors("Number of constructor arguments is out of range - see BOOST_DI_CFG_CTOR_LIMIT_SIZE"),
+          struct c{BOOST_DI_INJECT(c, int, int, int, int){}};
+          int main() {
+            auto injector = di::make_injector();
+            injector.create<c>();
+          });
     };
 
     test ctor_limit_out_of_range = [] {
@@ -1249,12 +1324,13 @@ int main() { di::make_injector<test_config>(); }
 #else
           "type<.*c>::has_to_many_constructor_parameters::max<3>"
 #endif
-          );
+      );
 
-      expect_compile_fail("-DBOOST_DI_CFG_CTOR_LIMIT_SIZE=3", errors_, struct c{c(int, int, int, int){}}; int main() {
-        auto injector = di::make_injector();
-        injector.create<c>();
-      });
+      expect_compile_fail(
+          "-DBOOST_DI_CFG_CTOR_LIMIT_SIZE=3", errors_, struct c{c(int, int, int, int){}}; int main() {
+            auto injector = di::make_injector();
+            injector.create<c>();
+          });
     };
 
     test injector_ctor_ambiguous = [] {
@@ -1266,10 +1342,11 @@ int main() { di::make_injector<test_config>(); }
 #else
           "type<.*ctor>::has_to_many_constructor_parameters::max<10>"
 #endif
-          );
+      );
 
-      expect_compile_fail("", errors_, struct ctor{ctor(int, double){} ctor(double, int){}};
-                          int main() { di::make_injector().create<ctor>(); });
+      expect_compile_fail(
+          "", errors_, struct ctor{ctor(int, double){} ctor(double, int){}};
+          int main() { di::make_injector().create<ctor>(); });
     };
 
     test ctor_number_of_args_is_not_equal = [] {
@@ -1281,7 +1358,7 @@ int main() { di::make_injector<test_config>(); }
 #else
           "type<.*c>::has_ambiguous_number_of_constructor_parameters::given<2>::expected<4>"
 #endif
-          );
+      );
 
       expect_compile_fail(
           "", errors_,
@@ -1296,96 +1373,110 @@ int main() { di::make_injector<test_config>(); }
     };
 
     test named_paramater_spelling = [] {
-      expect_compile_fail("", errors(), auto name = [] {}; struct c{BOOST_DI_INJECT(c, (NAMED = name) int){}}; int main(){});
+      expect_compile_fail(
+          "", errors(), auto name = [] {}; struct c{BOOST_DI_INJECT(c, (NAMED = name) int){}}; int main(){});
     };
 
     test circular_dependencies_simple = [] {
-      expect_compile_fail("", errors(), struct cd2; struct cd1 { cd1(cd2*){}; }; struct cd2 { cd2(cd1*){}; }; int main() {
-        auto injector = di::make_injector();
-        injector.create<cd1>();
-      });
+      expect_compile_fail(
+          "", errors(), struct cd2; struct cd1 { cd1(cd2*){}; }; struct cd2 { cd2(cd1*){}; }; int main() {
+            auto injector = di::make_injector();
+            injector.create<cd1>();
+          });
     };
 
     test circular_dependencies_complex = [] {
-      expect_compile_fail("", errors(), struct cd2; struct cd5; struct cd1 { cd1(cd2*){}; }; struct cd2 { cd2(cd1*){}; };
-                          struct cd3 { cd3(cd5*){}; }; struct cd4 { cd4(cd3*){}; }; struct cd5 { cd5(cd4*){}; }; int main() {
-                            auto injector = di::make_injector();
-                            injector.create<cd5>();
-                          });
+      expect_compile_fail(
+          "", errors(), struct cd2; struct cd5; struct cd1 { cd1(cd2*){}; }; struct cd2 { cd2(cd1*){}; };
+          struct cd3 { cd3(cd5*){}; }; struct cd4 { cd4(cd3*){}; }; struct cd5 { cd5(cd4*){}; }; int main() {
+            auto injector = di::make_injector();
+            injector.create<cd5>();
+          });
     };
 
     // ---------------------------------------------------------------------------
 
 #if (__GNUC__ < 6)
     test access_injector_is_creatable = [] {
-      expect_compile_fail("", errors(), int main() {
-        auto injector = di::make_injector();
-        using type = decltype(injector)::is_creatable<int>;
-      });
+      expect_compile_fail(
+          "", errors(), int main() {
+            auto injector = di::make_injector();
+            using type = decltype(injector)::is_creatable<int>;
+          });
     };
 #endif
 
     test access_injector_try_create = [] {
-      expect_compile_fail("", errors(), int main() {
-        auto injector = di::make_injector();
-        injector.try_create<int>();
-      });
+      expect_compile_fail(
+          "", errors(), int main() {
+            auto injector = di::make_injector();
+            injector.try_create<int>();
+          });
     };
 
     test access_injector_create_impl = [] {
-      expect_compile_fail("", errors(), int main() {
-        auto injector = di::make_injector();
-        injector.create_impl(di::aux::type<int>{});
-      });
+      expect_compile_fail(
+          "", errors(), int main() {
+            auto injector = di::make_injector();
+            injector.create_impl(di::aux::type<int>{});
+          });
     };
 
     test access_injector_create_succesful_impl = [] {
-      expect_compile_fail("", errors(), int main() {
-        auto injector = di::make_injector();
-        injector.create_successful_impl(di::aux::type<int>{});
-      });
+      expect_compile_fail(
+          "", errors(), int main() {
+            auto injector = di::make_injector();
+            injector.create_successful_impl(di::aux::type<int>{});
+          });
     };
 
     test access_injector_exposed_is_creatable = [] {
-      expect_compile_fail("", errors(), int main() {
-        di::injector<> injector = di::make_injector();
-        using type = decltype(injector)::is_creatable<int>;
-      });
+      expect_compile_fail(
+          "", errors(), int main() {
+            di::injector<> injector = di::make_injector();
+            using type = decltype(injector)::is_creatable<int>;
+          });
     };
 
     test access_injector_exposed_try_create = [] {
-      expect_compile_fail("", errors(), int main() {
-        di::injector<> injector = di::make_injector();
-        injector.try_create<int>();
-      });
+      expect_compile_fail(
+          "", errors(), int main() {
+            di::injector<> injector = di::make_injector();
+            injector.try_create<int>();
+          });
     };
 
     test access_injector_exposed_create_impl = [] {
-      expect_compile_fail("", errors(), int main() {
-        di::injector<> injector = di::make_injector();
-        injector.create_impl(di::aux::type<int>{});
-      });
+      expect_compile_fail(
+          "", errors(), int main() {
+            di::injector<> injector = di::make_injector();
+            injector.create_impl(di::aux::type<int>{});
+          });
     };
 
     test access_injector_exposed_create_succesful_impl = [] {
-      expect_compile_fail("", errors(), int main() {
-        di::injector<> injector = di::make_injector();
-        injector.create_successful_impl(di::aux::type<int>{});
-      });
+      expect_compile_fail(
+          "", errors(), int main() {
+            di::injector<> injector = di::make_injector();
+            injector.create_successful_impl(di::aux::type<int>{});
+          });
     };
 
     test access_dependency_try_create = [] {
-      expect_compile_fail("", errors(), int main() { di::bind<int>().try_create<int>(); });
+      expect_compile_fail(
+          "", errors(), int main() { di::bind<int>().try_create<int>(); });
     };
 
     test access_dependency_create = [] {
-      expect_compile_fail("", errors(), struct provider{}; int main() { di::bind<int>().create<int>(provider{}); });
+      expect_compile_fail(
+          "", errors(), struct provider{}; int main() { di::bind<int>().create<int>(provider{}); });
     };
 
 #if !defined(__MSVC__) && (__GNUC__ < 6)
     test access_dependency_is_referable = [] {
-      expect_compile_fail("<include> type_traits", errors(),
-                          int main() { using type = std::remove_reference_t<decltype(di::bind<int>())>::is_referable<int>; });
+      expect_compile_fail(
+          "<include> type_traits", errors(),
+          int main() { using type = std::remove_reference_t<decltype(di::bind<int>())>::is_referable<int>; });
     };
 #endif
 #endif

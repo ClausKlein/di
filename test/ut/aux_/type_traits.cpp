@@ -5,10 +5,12 @@
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #include "boost/di/aux_/type_traits.hpp"
+
 #include <memory>
 #include <set>
 #include <string>
 #include <vector>
+
 #include "boost/di/aux_/compiler.hpp"
 #include "boost/di/fwd.hpp"
 #include "common/common.hpp"
@@ -279,7 +281,7 @@ test unique_types = [] {
 test is_array_types = [] {
   static_expect(!is_array<int>::value);
   static_expect(is_array<int[]>::value);
-  static_expect(is_array<int* []>::value);
+  static_expect(is_array<int*[]>::value);
 };
 
 test is_empty_expr_types = [] {

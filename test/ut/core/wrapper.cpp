@@ -5,7 +5,9 @@
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #include "boost/di/core/wrapper.hpp"
+
 #include <type_traits>
+
 #include "common/fakes/fake_wrapper.hpp"
 
 namespace core {

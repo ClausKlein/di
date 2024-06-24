@@ -5,7 +5,9 @@
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #include "boost/di/concepts/scopable.hpp"
+
 #include <type_traits>
+
 #include "boost/di/aux_/compiler.hpp"
 #include "boost/di/scopes/deduce.hpp"
 #include "boost/di/scopes/instance.hpp"

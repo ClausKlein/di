@@ -8,6 +8,7 @@
 #define BOOST_DI_FAKE_INJECTOR_HPP
 
 #include <type_traits>
+
 #include "boost/di/aux_/utility.hpp"
 #include "boost/di/fwd.hpp"
 #include "common/fakes/fake_config.hpp"

@@ -5,6 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #include "boost/di/type_traits/memory_traits.hpp"
+
 #include <memory>
 #include <type_traits>
 #if __has_include(<boost / shared_ptr.hpp>)

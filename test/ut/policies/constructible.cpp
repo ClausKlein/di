@@ -5,8 +5,10 @@
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #include "boost/di/policies/constructible.hpp"
+
 #include <memory>
 #include <type_traits>
+
 #include "boost/di/aux_/utility.hpp"
 #include "boost/di/fwd.hpp"
 #include "boost/di/inject.hpp"

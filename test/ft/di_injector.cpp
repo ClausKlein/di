@@ -7,13 +7,14 @@
 // clang-format off
 #include <initializer_list>  // has to be before, due to the bug in clang < 3.7
 // clang-format on
-#include "boost/di.hpp"
 #include <iterator>
 #include <memory>
 #include <set>
 #include <string>
 #include <utility>
 #include <vector>
+
+#include "boost/di.hpp"
 
 namespace di = boost::di;
 
@@ -470,7 +471,7 @@ test is_injector_not_creatable = [] {
   };
 
   const auto injector = di::make_injector(di::bind<int>().to(42)  // not convertible to ref
-                                          );
+  );
 
   static_expect(!di::is_creatable<c>(injector));
 };

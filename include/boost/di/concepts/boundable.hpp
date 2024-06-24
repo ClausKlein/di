@@ -43,7 +43,7 @@ struct any_of : aux::false_type {};
 template <class... TDeps>
 struct is_supported
     : aux::is_same<aux::bool_list<aux::always<TDeps>::value...>,
-                   aux::bool_list<(aux::is_constructible<TDeps, TDeps&&>::value &&
+                   aux::bool_list<(aux::is_constructible<TDeps, TDeps &&>::value &&
                                    (aux::is_a<core::injector_base, TDeps>::value ||
                                     aux::is_a<core::dependency_base, TDeps>::value || aux::is_empty_expr<TDeps>::value))...>> {
 };
@@ -144,18 +144,18 @@ using boundable_impl__ = aux::conditional_t<
     typename type_<T>::template is_not_related_to<I>>;
 
 template <class I, class T>  // expected -> given
-auto boundable_impl(I&&, T &&)
+auto boundable_impl(I &&, T &&)
     -> aux::conditional_t<aux::is_same<T, aux::decay_t<T>>::value || !aux::is_complete<I>::value  // I is already verified
                           ,
                           boundable_impl__<I, T>, typename type_<T>::has_disallowed_qualifiers>;
 
 template <class I, class T>  // expected -> given
-auto boundable_impl(I&&, T&&, aux::valid<> &&)
+auto boundable_impl(I &&, T &&, aux::valid<> &&)
     -> aux::conditional_t<is_related<aux::is_complete<I>::value && aux::is_complete<T>::value, I, T>::value, aux::true_type,
                           typename type_<T>::template is_not_related_to<I>>;
 
 template <class I, class T>  // array[]
-auto boundable_impl(I* [], T &&) -> aux::conditional_t<aux::is_same<I, aux::decay_t<I>>::value, boundable_impl__<I, T>,
+auto boundable_impl(I *[], T &&) -> aux::conditional_t<aux::is_same<I, aux::decay_t<I>>::value, boundable_impl__<I, T>,
                                                        typename type_<I>::has_disallowed_qualifiers>;
 
 template <class I, class T>  // array[]
@@ -166,7 +166,7 @@ template <class... TDeps>  // bindings
 auto boundable_impl(aux::type_list<TDeps...> &&) -> boundable_bindings<TDeps...>;
 
 template <class T, class... Ts>  // any_of
-auto boundable_impl(concepts::any_of<Ts...>&&, T &&) ->
+auto boundable_impl(concepts::any_of<Ts...> &&, T &&) ->
     typename get_any_of_error<decltype(boundable_impl(aux::declval<Ts>(), aux::declval<T>()))...>::type;
 
 template <class... TDeps>  // make_injector

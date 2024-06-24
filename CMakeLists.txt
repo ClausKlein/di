@@ -1,60 +1,95 @@
 #
-# Copyright (c) 2012-2020 Kris Jusiak (kris at jusiak dot net)
+# Copyright (c) 2012-2022 Kris Jusiak (kris at jusiak dot net)
 #
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
-cmake_minimum_required(VERSION 2.8)
-project(Boost.DI CXX)
-set(CXX_STANDARD 14 CACHE STRING "C++ Standard Version. [14|17|20]")
+cmake_minimum_required(VERSION 3.16...3.24)
 
-add_library(${PROJECT_NAME} INTERFACE)
-target_include_directories(
-        ${PROJECT_NAME} INTERFACE
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/extension/include
+project(
+  DI
+  VERSION 1.2.1
+  LANGUAGES CXX
 )
 
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
-    set(COMPILER_SPECIFIC_CXX_STANDARD "-std=c++${CXX_STANDARD}")
-    string(REPLACE "14" "1y" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})
-    string(REPLACE "17" "1z" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})
-    string(REPLACE "20" "2a" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})    
-
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_SPECIFIC_CXX_STANDARD} -fno-exceptions -pedantic -pedantic-errors -Wall -Wextra -Werror")
-
-elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL Clang OR ${CMAKE_CXX_COMPILER_ID} STREQUAL AppleClang)
-    set(COMPILER_SPECIFIC_CXX_STANDARD "-std=c++${CXX_STANDARD}")
-    string(REPLACE "14" "1y" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})
-    string(REPLACE "17" "1z" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})
-    string(REPLACE "20" "2a" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})    
-
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_SPECIFIC_CXX_STANDARD} -fno-exceptions -pedantic -pedantic-errors -Wall -Wextra -Werror")
-    
-elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-    set(COMPILER_SPECIFIC_CXX_STANDARD "/std:c++${CXX_STANDARD}")
-    string(REPLACE "20" "latest" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})
-
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_SPECIFIC_CXX_STANDARD} /W3 /EHsc /Zc:__cplusplus")
-
-else()
-    message(WARNING "Unsupported compiler!")
+if(NOT DEFINED CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD
+      17
+      CACHE STRING "Default value for CXX_STANDARD property of targets."
+  )
+  option(CMAKE_CXX_STANDARD_REQUIRED "Default value for CXX_STANDARD_REQUIRED property of targets." YES)
+  option(CMAKE_CXX_EXTENSIONS "Default value for CXX_EXTENSIONS property of targets." NO)
 endif()
 
-if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-    set(IS_TOPLEVEL_PROJECT TRUE)
-else ()
-    set(IS_TOPLEVEL_PROJECT FALSE)
-endif ()
+if(NOT DEFINED CXX_STANDARD)
+  set(CXX_STANDARD
+      ${CMAKE_CXX_STANDARD}
+      CACHE STRING "C++ Standard Version. [14|17|20]"
+  )
+endif()
 
-option(BOOST_DI_OPT_BUILD_TESTS "Build and perform Boost.DI tests" ${IS_TOPLEVEL_PROJECT})
-if (BOOST_DI_OPT_BUILD_TESTS)
-    enable_testing()
-    add_subdirectory(extension/test)
-    add_subdirectory(test)
-endif ()
+add_library(${PROJECT_NAME} INTERFACE)
+add_library(Boost::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
-option(BOOST_DI_OPT_BUILD_EXAMPLES "Build perform Boost.DI examples" ${IS_TOPLEVEL_PROJECT})
-if (BOOST_DI_OPT_BUILD_EXAMPLES)
-    add_subdirectory(example)
-endif ()
+set(INCLUDE_INSTALL_DIR include/${PROJECT_NAME}-${PROJECT_VERSION}/include)
+target_include_directories(
+  ${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+                            $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/extension/include> $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>
+)
+# NOTE: this will not exported! set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD ${CMAKE_CXX_STANDARD})
+target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
+
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+  # XXX set(COMPILER_SPECIFIC_CXX_STANDARD "/std:c++${CXX_STANDARD}")
+  # XXX string(REPLACE "20" "latest" COMPILER_SPECIFIC_CXX_STANDARD ${COMPILER_SPECIFIC_CXX_STANDARD})
+
+  # TODO: prevent use of CMAKE_CXX_FLAGS! CK
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_SPECIFIC_CXX_STANDARD} /W3 /EHsc /Zc:__cplusplus")
+
+  # being a cross-platform target, we enforce standards conformance on MSVC
+  target_compile_options(${PROJECT_NAME} INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->)
+endif()
+
+if("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
+  set(PROJECT_IS_TOP_LEVEL TRUE)
+  option(WarningsAsErrors "Be really pedantic!" YES)
+  if(WarningsAsErrors)
+    include(cmake/WarningsAsErrors.cmake)
+  endif()
+else()
+  set(PROJECT_IS_TOP_LEVEL FALSE)
+endif()
+
+include(cmake/CPM.cmake)
+
+# PackageProject.cmake will be used to make our target installable
+CPMAddPackage(
+  NAME PackageProject.cmake
+  GITHUB_REPOSITORY TheLartians/PackageProject.cmake
+  VERSION 1.8.0
+)
+
+# Create target Boost::DI and install target
+packageProject(
+  NAME ${PROJECT_NAME}
+  VERSION ${PROJECT_VERSION}
+  NAMESPACE Boost
+  BINARY_DIR ${PROJECT_BINARY_DIR}
+  INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include
+  INCLUDE_DESTINATION ${INCLUDE_INSTALL_DIR}
+  COMPATIBILITY SameMajorVersion
+)
+
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/extension/include/ DESTINATION ${INCLUDE_INSTALL_DIR})
+
+option(BOOST_DI_OPT_BUILD_TESTS "Build and perform Boost::DI tests" ${PROJECT_IS_TOP_LEVEL})
+if(BOOST_DI_OPT_BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(extension/test)
+  add_subdirectory(test)
+endif()
+
+option(BOOST_DI_OPT_BUILD_EXAMPLES "Build perform Boost::DI examples" ${PROJECT_IS_TOP_LEVEL})
+if(BOOST_DI_OPT_BUILD_EXAMPLES)
+  add_subdirectory(example)
+endif()

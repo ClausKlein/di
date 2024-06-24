@@ -9,6 +9,7 @@
 #define CONTROLLER_HPP
 
 #include <memory>
+
 #include "model.hpp"
 #include "view.hpp"
 //->

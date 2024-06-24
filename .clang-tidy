@@ -1,5 +1,5 @@
 ---
-Checks:          'clang-diagnostic-*,clang-analyzer-*,-clang-analyzer-alpha*,*,-llvm-namespace-comment,-llvm-include-order,-readability-named-parameter,-google-readability-namespace-comments,-google-build-using-namespace,-google-readability-namespace-comments'
+Checks:          'clang-diagnostic-*,clang-analyzer-*,-clang-analyzer-alpha*,*,-altera-*,-llvmlibc-*,-llvm-namespace-comment,-llvm-include-order,-readability-named-parameter,-google-readability-namespace-comments,-google-build-using-namespace'
 HeaderFilterRegex: boost/di
 AnalyzeTemporaryDtors: false
 CheckOptions:

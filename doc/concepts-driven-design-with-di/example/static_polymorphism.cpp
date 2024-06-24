@@ -9,10 +9,11 @@ struct Reader {
 };
 
 struct FileReader : Reader<FileReader> {
-  explicit FileReader(const std::string& str) : file(str) { assert(file.good()); }
+  explicit FileReader(const std::string& path) : file(path) { assert(file.good()); }
 
   int read_impl() {
     auto value = 0;
+    file.seekg(0, std::ios_base::beg); // <- rewind
     file >> value;
     return value;
   }
@@ -44,5 +45,5 @@ int main() {
   FileReader reader{"input.txt"};
   ConsoleViewer viewer{};
   App<FileReader, ConsoleViewer>{reader, viewer}.run();
-  // App{reader, viewer}.run();
+  App{reader, viewer}.run();
 }

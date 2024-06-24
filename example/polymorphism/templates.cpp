@@ -7,7 +7,7 @@
 #include <cassert>
 #include <sstream>
 
-#include "example/polymorphism/common/config.hpp"
+#include "polymorphism/common/config.hpp"
 
 /*<<Static polymorphism - templates>>*/
 template <typename TDrawable = class Drawable>

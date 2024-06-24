@@ -6,7 +6,9 @@
 //
 //<-
 #include "module_view.hpp"
+
 #include <boost/di.hpp>
+
 #include "common.hpp"
 #include "config.hpp"
 #include "view.hpp"

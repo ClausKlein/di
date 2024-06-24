@@ -13,14 +13,20 @@ using Reader = boost::mpl::vector<has_read<int()>, boost::type_erasure::copy_con
 using Viewer = boost::mpl::vector<has_show<void(int)>, boost::type_erasure::copy_constructible<>>;
 
 class FileReader {
-  std::fstream file;
+  const std::string path;
+  //XXX std::fstream file;
 
  public:
-  explicit FileReader(const std::string& str) : file(path) { assert(file.good()); }
+  explicit FileReader(const std::string& _path) : path(_path) { }
+  //XXX explicit FileReader(const std::string& path) : file(path) { assert(file.good()); }
 
   int read() {
     auto value = 12;
+    std::fstream file(path);    // Note: this is better! CK
+
     file >> value;
+    assert(file.good());
+
     return value;
   }
 };

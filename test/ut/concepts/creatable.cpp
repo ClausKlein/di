@@ -5,6 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #include "boost/di/concepts/creatable.hpp"
+
 #include "boost/di/aux_/compiler.hpp"
 
 namespace concepts {
